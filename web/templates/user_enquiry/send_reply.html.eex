@@ -1,0 +1,29 @@
+<%= form_for @changeset, @action, [multipart: true, class: "ui form"], fn f -> %>
+  <%= if @changeset.action do %>
+    <div class="alert alert-danger">
+      <p>Oops, something went wrong! Please check the errors below.</p>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= label f, :message, "Message", class: "control-label" %>
+    <%= textarea(f, :message) %>
+  </div>
+
+  <div class="field">
+    <%= label f, :enquiry_response_attachment_path, "Attachment", class: "control-label" %>
+    <%= file_input f, :enquiry_response_attachment_path, class: "form-control" %>
+    <%= error_tag f, :enquiry_response_attachment_path %>
+  </div>
+
+  <%= hidden_input f, :enquiry_id, [class: "form-control", value: @user_enquiry.id] %>
+  <%= hidden_input f, :member_id, [class: "form-control", value: @user.id] %>
+  <%= checkbox f, :user_replied, [class: "form-control", value: true, type: "hidden"] %>
+  <%= checkbox f, :user_read, [class: "form-control", value: true, type: "hidden"] %>
+  <%= checkbox f, :admin_replied, [class: "form-control", value: false, type: "hidden"] %>
+  <%= checkbox f, :admin_read, [class: "form-control", value: false, type: "hidden"] %>
+
+  <div class="field">
+    <%= submit html_escape({:safe, "<i class='icon mail'></i>Reply"}), class: "ui blue labeled submit icon button" %>
+  </div>
+<% end %>

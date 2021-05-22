@@ -1,0 +1,6 @@
+<h2>New resource permissions</h2>
+
+<%= render "form.html", changeset: @changeset,
+                        action: resource_permissions_path(@conn, :create) %>
+
+<%= link "Back", to: resource_permissions_path(@conn, :index) %>

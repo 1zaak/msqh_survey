@@ -1,0 +1,23 @@
+<h2>Show enquiry response</h2>
+
+<ul>
+
+  <li>
+    <strong>Subject:</strong>
+    <%= @enquiry_response.subject %>
+  </li>
+
+  <li>
+    <strong>Message:</strong>
+    <%= @enquiry_response.message %>
+  </li>
+
+  <li>
+    <strong>Enquiry:</strong>
+    <%= @enquiry_response.enquiry_id %>
+  </li>
+
+</ul>
+
+<%= link "Edit", to: enquiry_response_path(@conn, :edit, @enquiry_response) %>
+<%= link "Back", to: enquiry_response_path(@conn, :index) %>

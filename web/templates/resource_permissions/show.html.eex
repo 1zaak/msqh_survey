@@ -1,0 +1,23 @@
+<h2>Show resource permissions</h2>
+
+<ul>
+
+  <li>
+    <strong>Resource:</strong>
+    <%= @resource_permissions.resource_id %>
+  </li>
+
+  <li>
+    <strong>Allowed user:</strong>
+    <%= @resource_permissions.allowed_user_id %>
+  </li>
+
+  <li>
+    <strong>Disallowed user:</strong>
+    <%= @resource_permissions.disallowed_user_id %>
+  </li>
+
+</ul>
+
+<%= link "Edit", to: resource_permissions_path(@conn, :edit, @resource_permissions) %>
+<%= link "Back", to: resource_permissions_path(@conn, :index) %>

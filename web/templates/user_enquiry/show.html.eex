@@ -1,0 +1,23 @@
+<h2>Show user enquiry</h2>
+
+<ul>
+
+  <li>
+    <strong>Title:</strong>
+    <%= @user_enquiry.title %>
+  </li>
+
+  <li>
+    <strong>Content:</strong>
+    <%= @user_enquiry.content %>
+  </li>
+
+  <li>
+    <strong>User:</strong>
+    <%= @user_enquiry.user_id %>
+  </li>
+
+</ul>
+
+<%= link "Edit", to: user_enquiry_path(@conn, :edit, @user_enquiry) %>
+<%= link "Back", to: user_enquiry_path(@conn, :index) %>

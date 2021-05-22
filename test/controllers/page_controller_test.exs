@@ -1,5 +1,5 @@
-defmodule Msqh.PageControllerTest do
-  use Msqh.ConnCase
+defmodule MsqhPortal.PageControllerTest do
+  use MsqhPortal.ConnCase
 
   test "GET /", %{conn: conn} do
     conn = get conn, "/"

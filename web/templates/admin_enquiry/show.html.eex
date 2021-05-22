@@ -1,0 +1,50 @@
+<h2>Show enquiry</h2>
+
+<ul>
+
+  <li>
+    <strong>Subject:</strong>
+    <%= @enquiry.subject %>
+  </li>
+
+  <li>
+    <strong>Message:</strong>
+    <%= @enquiry.message %>
+  </li>
+
+  <li>
+    <strong>Enquiry attachment path:</strong>
+    <%= unless is_nil(@enquiry.enquiry_attachment_path) do %>
+      <%= link "Attachment", to: MsqhPortal.EnquiryAttachment.url({@enquiry.enquiry_attachment_path, @enquiry}, :original)
+      |> String.split_at(12)
+      |> Tuple.delete_at(0)
+      |> Tuple.to_list
+      |> Enum.join, target: "_blank"  %>
+      <%= else %>
+      -
+    <%= end %>   
+  </li>
+
+</ul>
+
+<table class="ui celled table">
+  <thead>
+    <tr>
+      <th>Subject</th>
+      <th>Message</th>
+    </tr>
+  </thead>
+  <tbody>
+<%= for enquiry_response <- @enquiry.enquiry_responses do %>
+    <tr>
+      <td><%= enquiry_response.subject %></td>
+      <td><%= enquiry_response.message %></td>
+    </tr>
+<% end %>
+  </tbody>
+</table>
+<%= render "form.html", changeset: @changeset,
+                        action: admin_enquiry_path(@conn, :create),
+                        enquiry: @enquiry %>
+
+<%= link "Back", to: admin_enquiry_path(@conn, :index) %>

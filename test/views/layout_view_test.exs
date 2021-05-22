@@ -1,3 +1,3 @@
-defmodule Msqh.LayoutViewTest do
-  use Msqh.ConnCase, async: true
+defmodule MsqhPortal.LayoutViewTest do
+  use MsqhPortal.ConnCase, async: true
 end

@@ -1,0 +1,44 @@
+<h3 class="ui dividing header">
+  <i class="large university icon"></i>
+  <div class="content">Resources
+  </div>
+</h3>
+<div class="ui breadcrumb">
+  <%= link "Dashboard", to: admin_path(@conn, :index) %>
+  <div class="divider"> / </div>
+  <div class="active section">Resources</div>
+</div>
+<%= unless Enum.count(@resources) < 1 do %>
+<table class="ui table">
+  <thead>
+    <tr>
+      <th>Title</th>
+      <th>Description</th>
+      <th class="center aligned">Action</th>
+    </tr>
+  </thead>
+  <tbody>
+<%= for resource <- @resources do %>
+    <tr>
+      <td><%= link resource.title, to: MsqhPortal.ResourceAttachment.url({resource.resource_path, resource}, :original)
+      |> String.split_at(12)
+      |> Tuple.delete_at(0)
+      |> Tuple.to_list
+      |> Enum.join, target: "_blank"  %></td>
+      <td><%= resource.description %></td>
+
+      <td class="center aligned">
+        <%= link html_escape({:safe, "<i class='large edit icon'></i>"}), to: admin_resource_path(@conn, :edit, resource), class: "btn btn-default btn-xs" %>
+        <%= link html_escape({:safe, "<i class='large remove icon'></i>"}), to: admin_resource_path(@conn, :delete, resource), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-danger btn-xs" %>
+      </td>
+    </tr>
+<% end %>
+  </tbody>
+</table>
+<%= else %>
+<div class="ui relaxed divided list">
+No resources uploaded
+</div>
+<%= end %>
+<%= pagination_links @resources, view_style: :semantic%>
+<%= link html_escape({:safe, "<i class='large plus icon'></i>Add Resource"}), to: admin_resource_path(@conn, :new) , class: "ui large teal label" %>

@@ -1,0 +1,103 @@
+  <h3 class="ui dividing header">
+    <i class="large users icon"></i>
+    <div class="content">Users
+    </div>
+  </h3>
+  <div class="ui info message alert alert-info"><%= get_flash(@conn, :info) %></div>
+  <div class="ui error message alert alert-danger"><%= get_flash(@conn, :error) %></div>
+
+  <div class="ui grid">
+    <div class="four wide column">
+
+        <%= render "search.html", changeset: @search_changeset,
+                                action: admin_path(@conn, :search) %>
+
+    </div>
+    <div class="twelve wide column">
+      <%= if Enum.count(@users) < 1 do %>
+        No users found
+      <%= end %>
+      <div class="ui three cards">
+        <%= for user <- @users do %>
+        <div class="ui fluid card">
+          <div class="content">
+            <%= if is_nil(user.membership) do %>
+              <%= if user.state == "EXPIRED" do %>
+                <div class="ui red horizontal label right floated"><%= user.state %></div>
+              <%= end %>
+              <%= if user.state == "ACTIVE" do %>
+                <div class="ui green horizontal label right floated"><%= user.state %></div>
+              <%= end %>
+              <%= if user.state == "INACTIVE" do %>
+                <div class="ui grey horizontal label right floated"><%= user.state %></div>
+              <%= end %>
+              <%= if user.state == "PAID" do %>
+                <div class="ui blue horizontal label right floated"><%= user.state %></div>
+              <%= end %>
+            <%= else %>
+              <%= if user.membership.state == "PAYMENT SELECTION" or user.membership.state == "MEMBERSHIP SELECTION" do %>
+                <div class="ui orange horizontal label right floated">VERIFY</div>
+              <%= else %>
+                <%= if user.state == "EXPIRED" do %>
+                  <div class="ui red horizontal label right floated"><%= user.state %></div>
+                <%= end %>
+                <%= if user.state == "ACTIVE" do %>
+                  <div class="ui green horizontal label right floated"><%= user.state %></div>
+                <%= end %>
+                <%= if user.state == "INACTIVE" do %>
+                  <div class="ui grey horizontal label right floated"><%= user.state %></div>
+                <%= end %>
+                <%= if user.state == "PAID" do %>
+                  <div class="ui blue horizontal label right floated"><%= user.state %></div>
+                <%= end %>
+              <%= end %>
+            <%= end %>
+
+            <div class="header">
+              <%= if is_nil(user.name) == false && is_nil(user.title) == false && is_nil(user.username) == false do  %>
+                <%= if String.length(user.name) + String.length(user.title) > 10 do  %>
+                  <%= String.slice(user.title <> " " <> user.name, 0..10) <> "..." %>
+                <%= else %>
+                  <%= user.title <> " " <> user.name %>
+                <%= end %>
+              <%= else %>
+                <%= if String.length(user.username) > 10 do  %>
+                  <%= String.slice(user.username, 0..10) <> "..." %>
+                <%= else %>
+                  <%= user.username %>
+                <%= end %>
+              <%= end %>
+
+            </div>
+            <div class="meta">
+              <%= unless (is_nil(user.email)) do %>
+                <%= if String.length(user.email) > 20 do  %>
+                  <%= String.slice(user.email, 0..20) <> "..." %>
+                <%= else %>
+                  <%= user.email %>
+                <%= end %>
+              <%= else %>
+                -
+              <%= end %>
+
+
+            </div>
+          </div>
+          <div class="content">
+              <%= link html_escape({:safe, "<i class='external icon'></i>Details"}), to: admin_path(@conn, :show, user), class: "right floated"  %>
+              <%= if user.approved do %>
+              <span>
+                <i class="toggle on icon"></i>Approved
+              </span>
+              <%= else %>
+                <%= link html_escape({:safe, "<i class='toggle off icon'></i>Not Approved"}), to: admin_path(@conn, :approve, user),
+                data: [confirm: "Are you sure you want to approve " <> user.username]%>
+              <%= end %>
+          </div>
+        </div>
+        <% end %>
+      </div>
+      <br/>
+      <%= pagination_links @users, view_style: :semantic %>
+    </div>
+  </div>

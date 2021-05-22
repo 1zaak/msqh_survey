@@ -1,0 +1,39 @@
+<h2 class="ui teal image header">
+  <img src="/images/logo-main.png" class="image">
+  <div class="content">
+    Member Login
+  </div>
+</h2>
+
+<div class="ui info message alert alert-info"><%= get_flash(@conn, :info) %></div>
+<div class="ui error message alert alert-danger"><%= get_flash(@conn, :error) %></div>
+
+<%= form_for @conn, session_path(@conn, :create), [as: :session, class: "ui large form"],  fn f -> %>
+  <div class="ui raised segment">
+    <div class="field">
+      <div class="ui left icon input">
+        <i class="user icon"></i>
+        <%= text_input f, :username, placeholder: "Username", class: "form-control input" %>
+      </div>
+    </div>
+    <div class="field">
+      <div class="ui left icon input">
+        <i class="lock icon"></i>
+        <%= password_input f, :password, placeholder: "Password",  class: "form-control input" %>
+      </div>
+    </div>
+
+    <%= submit "Login", class: "ui fluid large teal submit button" %>
+
+    <br/>
+
+    <%= link html_escape({:safe, "Admin?"}), to: admin_login_path(@conn, :index), class: "center item" %><br/>
+
+    <%= link html_escape({:safe, "Forgot Password?"}), to: login_path(@conn, :change), class: "center item" %>
+
+  </div>
+<% end %>
+
+<div class="ui raised segment">
+  Register as new MSQH member? <%= link "Sign Up Here", to: user_path(@conn, :new) %></a>
+</div>

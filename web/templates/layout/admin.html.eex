@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Admin | MSQH Portal</title>
+    <link rel="stylesheet" href="<%= static_path(@conn, "/css/vendor.css") %>">
+    <link rel="stylesheet" href="<%= static_path(@conn, "/css/app.css") %>">
+  </head>
+
+  <body>
+    <div class="page">
+      <header>
+          <div class="bigcontainer">
+              <div id="logo">
+                  <%= link "MSQH", to: admin_path(@conn, :index) %>
+              </div>
+              <div class="user">
+                  <%= unless @admin_unread < 1 do %>
+                  <div class="ui compact text menu">
+                      <%= link html_escape({:safe, "<i class='mail large icon'></i>
+                          <span class='circular floating ui small red label'>#{@admin_unread}</span>"}), to: admin_enquiry_path(@conn, :index), class: "item" %>
+                  </div>
+                  <%= else %>
+                  <div class="ui compact text menu">
+                    <%= link html_escape({:safe, "<i class='mail large icon'></i>"}), to: admin_enquiry_path(@conn, :index), class: "item" %>
+                  </div>
+                  <%= end %>
+                  <div class="ui inline labeled top right pointing dropdown">
+                    <%= if @current_user.gender == "male" do %>
+                      <img class="ui avatar image" src="/images/avatar-admin-male.png"> Welcome, <%= @current_user.username %>
+                    <%= end %>
+
+                    <%= if @current_user.gender == "female" do %>
+                      <img class="ui avatar image" src="/images/avatar-admin-female.png"> Welcome, <%= @current_user.username %>
+                    <%= end %>
+
+                    <%= if is_nil(@current_user.gender) do %>
+                      <img class="ui avatar image" src="/images/avatar-admin.png"> Welcome, <%= @current_user.username %>
+                    <%= end %>
+
+                  </div>
+              </div>
+          </div>
+      </header>
+
+      <!-- the main menu-->
+      <div class="ui violet inverted menu">
+          <div class="bigcontainer">
+              <div class="right menu">
+                <%= if @conn.request_path == "/admin/dashboard" do %>
+                  <%= link html_escape({:safe, "<i class='users icon'></i>Users & Memberships"}), to: admin_path(@conn, :index), class: "active item" %>
+                  <%= link html_escape({:safe, "<i class='hospital icon'></i>Facilities"}), to: admin_facility_path(@conn, :index), class: "item" %>
+                  <%= link html_escape({:safe, "<i class='talk icon'></i>Enquiries"}), to: admin_enquiry_path(@conn, :index), class: "item" %>
+                  <%= link html_escape({:safe, "<i class='calendar icon'></i>Events"}), to: admin_event_path(@conn, :index), class: "item" %>
+                  <%= link html_escape({:safe, "<i class='university icon'></i>Resources"}), to: admin_resource_path(@conn, :index), class: "item" %>
+                  <%= link html_escape({:safe, "<i class='payment icon'></i>Payments History"}), to: payment_log_path(@conn, :index), class: "item" %>
+                  <%= link html_escape({:safe, "<i class='setting icon'></i>Global Settings"}), to: admin_setting_path(@conn, :index), class: "item" %>
+                  <%= link html_escape({:safe, "<i class='sign out icon'></i>Sign Out"}), to: admin_session_path(@conn, :delete, @current_user), method: "delete", class: "item" %>
+                <%= end %>
+                <%= if @conn.request_path == "/admin/search" do %>
+                  <%= link html_escape({:safe, "<i class='users icon'></i>Users & Memberships"}), to: admin_path(@conn, :index), class: "active item" %>
+                  <%= link html_escape({:safe, "<i class='hospital icon'></i>Facilities"}), to: admin_facility_path(@conn, :index), class: "item" %>
+                  <%= link html_escape({:safe, "<i class='talk icon'></i>Enquiries"}), to: admin_enquiry_path(@conn, :index), class: "item" %>
+                  <%= link html_escape({:safe, "<i class='calendar icon'></i>Events"}), to: admin_event_path(@conn, :index), class: "item" %>
+                  <%= link html_escape({:safe, "<i class='university icon'></i>Resources"}), to: admin_resource_path(@conn, :index), class: "item" %>
+                  <%= link html_escape({:safe, "<i class='payment icon'></i>Payments History"}), to: payment_log_path(@conn, :index), class: "item" %>
+                  <%= link html_escape({:safe, "<i class='setting icon'></i>Global Settings"}), to: admin_setting_path(@conn, :index), class: "item" %>
+                  <%= link html_escape({:safe, "<i class='sign out icon'></i>Sign Out"}), to: admin_session_path(@conn, :delete, @current_user), method: "delete", class: "item" %>
+                <%= end %>
+                <%= if Regex.match?(~r/\/admin\/dashboard\/\d+$/, @conn.request_path) do %>
+                  <%= link html_escape({:safe, "<i class='users icon'></i>Users & Memberships"}), to: admin_path(@conn, :index), class: "active item" %>
+                  <%= link html_escape({:safe, "<i class='hospital icon'></i>Facilities"}), to: admin_facility_path(@conn, :index), class: "item" %>
+                  <%= link html_escape({:safe, "<i class='talk icon'></i>Enquiries"}), to: admin_enquiry_path(@conn, :index), class: "item" %>
+                  <%= link html_escape({:safe, "<i class='calendar icon'></i>Events"}), to: admin_event_path(@conn, :index), class: "item" %>
+                  <%= link html_escape({:safe, "<i class='university icon'></i>Resources"}), to: admin_resource_path(@conn, :index), class: "item" %>
+                  <%= link html_escape({:safe, "<i class='payment icon'></i>Payments History"}), to: payment_log_path(@conn, :index), class: "item" %>
+                  <%= link html_escape({:safe, "<i class='setting icon'></i>Global Settings"}), to: admin_setting_path(@conn, :index), class: "item" %>
+                  <%= link html_escape({:safe, "<i class='sign out icon'></i>Sign Out"}), to: admin_session_path(@conn, :delete, @current_user), method: "delete", class: "item" %>
+                <%= end %>
+                <%= if Regex.match?(~r/\/admin\/dashboard\/edit\/\d+$/, @conn.request_path) do %>
+                  <%= link html_escape({:safe, "<i class='users icon'></i>Users & Memberships"}), to: admin_path(@conn, :index), class: "active item" %>
+                  <%= link html_escape({:safe, "<i class='hospital icon'></i>Facilities"}), to: admin_facility_path(@conn, :index), class: "item" %>
+                  <%= link html_escape({:safe, "<i class='talk icon'></i>Enquiries"}), to: admin_enquiry_path(@conn, :index), class: "item" %>
+                  <%= link html_escape({:safe, "<i class='calendar icon'></i>Events"}), to: admin_event_path(@conn, :index), class: "item" %>
+                  <%= link html_escape({:safe, "<i class='university icon'></i>Resources"}), to: admin_resource_path(@conn, :index), class: "item" %>
+                  <%= link html_escape({:safe, "<i class='payment icon'></i>Payments History"}), to: payment_log_path(@conn, :index), class: "item" %>
+                  <%= link html_escape({:safe, "<i class='setting icon'></i>Global Settings"}), to: admin_setting_path(@conn, :index), class: "item" %>
+                  <%= link html_escape({:safe, "<i class='sign out icon'></i>Sign Out"}), to: admin_session_path(@conn, :delete, @current_user), method: "delete", class: "item" %>
+                <%= end %>
+                <%= if Regex.match?(~r/\/admin\/dashboard\/change\/\d+$/, @conn.request_path) do %>
+                  <%= link html_escape({:safe, "<i class='users icon'></i>Users & Memberships"}), to: admin_path(@conn, :index), class: "active item" %>
+                  <%= link html_escape({:safe, "<i class='hospital icon'></i>Facilities"}), to: admin_facility_path(@conn, :index), class: "item" %>
+                  <%= link html_escape({:safe, "<i class='talk icon'></i>Enquiries"}), to: admin_enquiry_path(@conn, :index), class: "item" %>
+                  <%= link html_escape({:safe, "<i class='calendar icon'></i>Events"}), to: admin_event_path(@conn, :index), class: "item" %>
+                  <%= link html_escape({:safe, "<i class='university icon'></i>Resources"}), to: admin_resource_path(@conn, :index), class: "item" %>
+                  <%= link html_escape({:safe, "<i class='payment icon'></i>Payments History"}), to: payment_log_path(@conn, :index), class: "item" %>
+                  <%= link html_escape({:safe, "<i class='setting icon'></i>Global Settings"}), to: admin_setting_path(@conn, :index), class: "item" %>
+                  <%= link html_escape({:safe, "<i class='sign out icon'></i>Sign Out"}), to: admin_session_path(@conn, :delete, @current_user), method: "delete", class: "item" %>
+                <%= end %>
+                <%= if @conn.request_path == "/admin/facilities" do %>
+                  <%= link html_escape({:safe, "<i class='users icon'></i>Users & Memberships"}), to: admin_path(@conn, :index), class: "item" %>
+                  <%= link html_escape({:safe, "<i class='hospital icon'></i>Facilities"}), to: admin_facility_path(@conn, :index), class: "active item" %>
+                  <%= link html_escape({:safe, "<i class='talk icon'></i>Enquiries"}), to: admin_enquiry_path(@conn, :index), class: "item" %>
+                  <%= link html_escape({:safe, "<i class='calendar icon'></i>Events"}), to: admin_event_path(@conn, :index), class: "item" %>
+                  <%= link html_escape({:safe, "<i class='university icon'></i>Resources"}), to: admin_resource_path(@conn, :index), class: "item" %>
+                  <%= link html_escape({:safe, "<i class='payment icon'></i>Payments History"}), to: payment_log_path(@conn, :index), class: "item" %>
+                  <%= link html_escape({:safe, "<i class='setting icon'></i>Global Settings"}), to: admin_setting_path(@conn, :index), class: "item" %>
+                  <%= link html_escape({:safe, "<i class='sign out icon'></i>Sign Out"}), to: admin_session_path(@conn, :delete, @current_user), method: "delete", class: "item" %>
+                <%= end %>
+                <%= if Regex.match?(~r/\/admin\/facilities\/\d+$/, @conn.request_path) do %>
+                  <%= link html_escape({:safe, "<i class='users icon'></i>Users & Memberships"}), to: admin_path(@conn, :index), class: "item" %>
+                  <%= link html_escape({:safe, "<i class='hospital icon'></i>Facilities"}), to: admin_facility_path(@conn, :index), class: "active item" %>
+                  <%= link html_escape({:safe, "<i class='talk icon'></i>Enquiries"}), to: admin_enquiry_path(@conn, :index), class: "item" %>
+                  <%= link html_escape({:safe, "<i class='calendar icon'></i>Events"}), to: admin_event_path(@conn, :index), class: "item" %>
+                  <%= link html_escape({:safe, "<i class='university icon'></i>Resources"}), to: admin_resource_path(@conn, :index), class: "item" %>
+                  <%= link html_escape({:safe, "<i class='payment icon'></i>Payments History"}), to: payment_log_path(@conn, :index), class: "item" %>
+                  <%= link html_escape({:safe, "<i class='setting icon'></i>Global Settings"}), to: admin_setting_path(@conn, :index), class: "item" %>
+                  <%= link html_escape({:safe, "<i class='sign out icon'></i>Sign Out"}), to: admin_session_path(@conn, :delete, @current_user), method: "delete", class: "item" %>
+                <%= end %>
+                <%= if Regex.match?(~r/\/admin\/facilities\/edit\/\d+$/, @conn.request_path) do %>
+                  <%= link html_escape({:safe, "<i class='users icon'></i>Users & Memberships"}), to: admin_path(@conn, :index), class: "item" %>
+                  <%= link html_escape({:safe, "<i class='hospital icon'></i>Facilities"}), to: admin_facility_path(@conn, :index), class: "active item" %>
+                  <%= link html_escape({:safe, "<i class='talk icon'></i>Enquiries"}), to: admin_enquiry_path(@conn, :index), class: "item" %>
+                  <%= link html_escape({:safe, "<i class='calendar icon'></i>Events"}), to: admin_event_path(@conn, :index), class: "item" %>
+                  <%= link html_escape({:safe, "<i class='university icon'></i>Resources"}), to: admin_resource_path(@conn, :index), class: "item" %>
+                  <%= link html_escape({:safe, "<i class='payment icon'></i>Payments History"}), to: payment_log_path(@conn, :index), class: "item" %>
+                  <%= link html_escape({:safe, "<i class='setting icon'></i>Global Settings"}), to: admin_setting_path(@conn, :index), class: "item" %>
+                  <%= link html_escape({:safe, "<i class='sign out icon'></i>Sign Out"}), to: admin_session_path(@conn, :delete, @current_user), method: "delete", class: "item" %>
+                <%= end %>
+                <%= if @conn.request_path == "/admin/facilities/new" do %>
+                  <%= link html_escape({:safe, "<i class='users icon'></i>Users & Memberships"}), to: admin_path(@conn, :index), class: "item" %>
+                  <%= link html_escape({:safe, "<i class='hospital icon'></i>Facilities"}), to: admin_facility_path(@conn, :index), class: "active item" %>
+                  <%= link html_escape({:safe, "<i class='talk icon'></i>Enquiries"}), to: admin_enquiry_path(@conn, :index), class: "item" %>
+                  <%= link html_escape({:safe, "<i class='calendar icon'></i>Events"}), to: admin_event_path(@conn, :index), class: "item" %>
+                  <%= link html_escape({:safe, "<i class='university icon'></i>Resources"}), to: admin_resource_path(@conn, :index), class: "item" %>
+                  <%= link html_escape({:safe, "<i class='payment icon'></i>Payments History"}), to: payment_log_path(@conn, :index), class: "item" %>
+                  <%= link html_escape({:safe, "<i class='setting icon'></i>Global Settings"}), to: admin_setting_path(@conn, :index), class: "item" %>
+                  <%= link html_escape({:safe, "<i class='sign out icon'></i>Sign Out"}), to: admin_session_path(@conn, :delete, @current_user), method: "delete", class: "item" %>
+                <%= end %>
+                <%= if @conn.request_path == "/admin/enquiries" do %>
+                  <%= link html_escape({:safe, "<i class='users icon'></i>Users & Memberships"}), to: admin_path(@conn, :index), class: "item" %>
+                  <%= link html_escape({:safe, "<i class='hospital icon'></i>Facilities"}), to: admin_facility_path(@conn, :index), class: "item" %>
+                  <%= link html_escape({:safe, "<i class='talk icon'></i>Enquiries"}), to: admin_enquiry_path(@conn, :index), class: "active item" %>
+                  <%= link html_escape({:safe, "<i class='calendar icon'></i>Events"}), to: admin_event_path(@conn, :index), class: "item" %>
+                  <%= link html_escape({:safe, "<i class='university icon'></i>Resources"}), to: admin_resource_path(@conn, :index), class: "item" %>
+                  <%= link html_escape({:safe, "<i class='payment icon'></i>Payments History"}), to: payment_log_path(@conn, :index), class: "item" %>
+                  <%= link html_escape({:safe, "<i class='setting icon'></i>Global Settings"}), to: admin_setting_path(@conn, :index), class: "item" %>
+                  <%= link html_escape({:safe, "<i class='sign out icon'></i>Sign Out"}), to: admin_session_path(@conn, :delete, @current_user), method: "delete", class: "item" %>
+                <%= end %>
+                <%= if Regex.match?(~r/\/admin\/enquiries\/reply\/\d+$/, @conn.request_path) do %>
+                  <%= link html_escape({:safe, "<i class='users icon'></i>Users & Memberships"}), to: admin_path(@conn, :index), class: "item" %>
+                  <%= link html_escape({:safe, "<i class='hospital icon'></i>Facilities"}), to: admin_facility_path(@conn, :index), class: "item" %>
+                  <%= link html_escape({:safe, "<i class='talk icon'></i>Enquiries"}), to: admin_enquiry_path(@conn, :index), class: "active item" %>
+                  <%= link html_escape({:safe, "<i class='calendar icon'></i>Events"}), to: admin_event_path(@conn, :index), class: "item" %>
+                  <%= link html_escape({:safe, "<i class='university icon'></i>Resources"}), to: admin_resource_path(@conn, :index), class: "item" %>
+                  <%= link html_escape({:safe, "<i class='payment icon'></i>Payments History"}), to: payment_log_path(@conn, :index), class: "item" %>
+                  <%= link html_escape({:safe, "<i class='setting icon'></i>Global Settings"}), to: admin_setting_path(@conn, :index), class: "item" %>
+                  <%= link html_escape({:safe, "<i class='sign out icon'></i>Sign Out"}), to: admin_session_path(@conn, :delete, @current_user), method: "delete", class: "item" %>
+                <%= end %>
+                <%= if @conn.request_path == "/admin/enquiries/new" do %>
+                  <%= link html_escape({:safe, "<i class='users icon'></i>Users & Memberships"}), to: admin_path(@conn, :index), class: "item" %>
+                  <%= link html_escape({:safe, "<i class='hospital icon'></i>Facilities"}), to: admin_facility_path(@conn, :index), class: "item" %>
+                  <%= link html_escape({:safe, "<i class='talk icon'></i>Enquiries"}), to: admin_enquiry_path(@conn, :index), class: "active item" %>
+                  <%= link html_escape({:safe, "<i class='calendar icon'></i>Events"}), to: admin_event_path(@conn, :index), class: "item" %>
+                  <%= link html_escape({:safe, "<i class='university icon'></i>Resources"}), to: admin_resource_path(@conn, :index), class: "item" %>
+                  <%= link html_escape({:safe, "<i class='payment icon'></i>Payments History"}), to: payment_log_path(@conn, :index), class: "item" %>
+                  <%= link html_escape({:safe, "<i class='setting icon'></i>Global Settings"}), to: admin_setting_path(@conn, :index), class: "item" %>
+                  <%= link html_escape({:safe, "<i class='sign out icon'></i>Sign Out"}), to: admin_session_path(@conn, :delete, @current_user), method: "delete", class: "item" %>
+                <%= end %>
+                <%= if @conn.request_path == "/admin/events" do %>
+                  <%= link html_escape({:safe, "<i class='users icon'></i>Users & Memberships"}), to: admin_path(@conn, :index), class: "item" %>
+                  <%= link html_escape({:safe, "<i class='hospital icon'></i>Facilities"}), to: admin_facility_path(@conn, :index), class: "item" %>
+                  <%= link html_escape({:safe, "<i class='talk icon'></i>Enquiries"}), to: admin_enquiry_path(@conn, :index), class: "item" %>
+                  <%= link html_escape({:safe, "<i class='calendar icon'></i>Events"}), to: admin_event_path(@conn, :index), class: "active item" %>
+                  <%= link html_escape({:safe, "<i class='university icon'></i>Resources"}), to: admin_resource_path(@conn, :index), class: "item" %>
+                  <%= link html_escape({:safe, "<i class='payment icon'></i>Payments History"}), to: payment_log_path(@conn, :index), class: "item" %>
+                  <%= link html_escape({:safe, "<i class='setting icon'></i>Global Settings"}), to: admin_setting_path(@conn, :index), class: "item" %>
+                  <%= link html_escape({:safe, "<i class='sign out icon'></i>Sign Out"}), to: admin_session_path(@conn, :delete, @current_user), method: "delete", class: "item" %>
+                <%= end %>
+                <%= if Regex.match?(~r/\/admin\/events\/\d+$/, @conn.request_path) do %>
+                  <%= link html_escape({:safe, "<i class='users icon'></i>Users & Memberships"}), to: admin_path(@conn, :index), class: "item" %>
+                  <%= link html_escape({:safe, "<i class='hospital icon'></i>Facilities"}), to: admin_facility_path(@conn, :index), class: "item" %>
+                  <%= link html_escape({:safe, "<i class='talk icon'></i>Enquiries"}), to: admin_enquiry_path(@conn, :index), class: "item" %>
+                  <%= link html_escape({:safe, "<i class='calendar icon'></i>Events"}), to: admin_event_path(@conn, :index), class: "active item" %>
+                  <%= link html_escape({:safe, "<i class='university icon'></i>Resources"}), to: admin_resource_path(@conn, :index), class: "item" %>
+                  <%= link html_escape({:safe, "<i class='payment icon'></i>Payments History"}), to: payment_log_path(@conn, :index), class: "item" %>
+                  <%= link html_escape({:safe, "<i class='setting icon'></i>Global Settings"}), to: admin_setting_path(@conn, :index), class: "item" %>
+                  <%= link html_escape({:safe, "<i class='sign out icon'></i>Sign Out"}), to: admin_session_path(@conn, :delete, @current_user), method: "delete", class: "item" %>
+                <%= end %>
+                <%= if Regex.match?(~r/\/admin\/events\/edit\/\d+$/, @conn.request_path) do %>
+                  <%= link html_escape({:safe, "<i class='users icon'></i>Users & Memberships"}), to: admin_path(@conn, :index), class: "item" %>
+                  <%= link html_escape({:safe, "<i class='hospital icon'></i>Facilities"}), to: admin_facility_path(@conn, :index), class: "item" %>
+                  <%= link html_escape({:safe, "<i class='talk icon'></i>Enquiries"}), to: admin_enquiry_path(@conn, :index), class: "item" %>
+                  <%= link html_escape({:safe, "<i class='calendar icon'></i>Events"}), to: admin_event_path(@conn, :index), class: "active item" %>
+                  <%= link html_escape({:safe, "<i class='university icon'></i>Resources"}), to: admin_resource_path(@conn, :index), class: "item" %>
+                  <%= link html_escape({:safe, "<i class='payment icon'></i>Payments History"}), to: payment_log_path(@conn, :index), class: "item" %>
+                  <%= link html_escape({:safe, "<i class='setting icon'></i>Global Settings"}), to: admin_setting_path(@conn, :index), class: "item" %>
+                  <%= link html_escape({:safe, "<i class='sign out icon'></i>Sign Out"}), to: admin_session_path(@conn, :delete, @current_user), method: "delete", class: "item" %>
+                <%= end %>
+                <%= if @conn.request_path == "/admin/events/voucher/create" do %>
+                  <%= link html_escape({:safe, "<i class='users icon'></i>Users & Memberships"}), to: admin_path(@conn, :index), class: "item" %>
+                  <%= link html_escape({:safe, "<i class='hospital icon'></i>Facilities"}), to: admin_facility_path(@conn, :index), class: "item" %>
+                  <%= link html_escape({:safe, "<i class='talk icon'></i>Enquiries"}), to: admin_enquiry_path(@conn, :index), class: "item" %>
+                  <%= link html_escape({:safe, "<i class='calendar icon'></i>Events"}), to: admin_event_path(@conn, :index), class: "active item" %>
+                  <%= link html_escape({:safe, "<i class='university icon'></i>Resources"}), to: admin_resource_path(@conn, :index), class: "item" %>
+                  <%= link html_escape({:safe, "<i class='payment icon'></i>Payments History"}), to: payment_log_path(@conn, :index), class: "item" %>
+                  <%= link html_escape({:safe, "<i class='setting icon'></i>Global Settings"}), to: admin_setting_path(@conn, :index), class: "item" %>
+                  <%= link html_escape({:safe, "<i class='sign out icon'></i>Sign Out"}), to: admin_session_path(@conn, :delete, @current_user), method: "delete", class: "item" %>
+                <%= end %>
+                <%= if @conn.request_path == "/admin/events/voucher/create/" do %>
+                  <%= link html_escape({:safe, "<i class='users icon'></i>Users & Memberships"}), to: admin_path(@conn, :index), class: "item" %>
+                  <%= link html_escape({:safe, "<i class='hospital icon'></i>Facilities"}), to: admin_facility_path(@conn, :index), class: "item" %>
+                  <%= link html_escape({:safe, "<i class='talk icon'></i>Enquiries"}), to: admin_enquiry_path(@conn, :index), class: "item" %>
+                  <%= link html_escape({:safe, "<i class='calendar icon'></i>Events"}), to: admin_event_path(@conn, :index), class: "active item" %>
+                  <%= link html_escape({:safe, "<i class='university icon'></i>Resources"}), to: admin_resource_path(@conn, :index), class: "item" %>
+                  <%= link html_escape({:safe, "<i class='payment icon'></i>Payments History"}), to: payment_log_path(@conn, :index), class: "item" %>
+                  <%= link html_escape({:safe, "<i class='setting icon'></i>Global Settings"}), to: admin_setting_path(@conn, :index), class: "item" %>
+                  <%= link html_escape({:safe, "<i class='sign out icon'></i>Sign Out"}), to: admin_session_path(@conn, :delete, @current_user), method: "delete", class: "item" %>
+                <%= end %>
+                <%= if @conn.request_path == "/admin/events/new" do %>
+                  <%= link html_escape({:safe, "<i class='users icon'></i>Users & Memberships"}), to: admin_path(@conn, :index), class: "item" %>
+                  <%= link html_escape({:safe, "<i class='hospital icon'></i>Facilities"}), to: admin_facility_path(@conn, :index), class: "item" %>
+                  <%= link html_escape({:safe, "<i class='talk icon'></i>Enquiries"}), to: admin_enquiry_path(@conn, :index), class: "item" %>
+                  <%= link html_escape({:safe, "<i class='calendar icon'></i>Events"}), to: admin_event_path(@conn, :index), class: "active item" %>
+                  <%= link html_escape({:safe, "<i class='university icon'></i>Resources"}), to: admin_resource_path(@conn, :index), class: "item" %>
+                  <%= link html_escape({:safe, "<i class='payment icon'></i>Payments History"}), to: payment_log_path(@conn, :index), class: "item" %>
+                  <%= link html_escape({:safe, "<i class='setting icon'></i>Global Settings"}), to: admin_setting_path(@conn, :index), class: "item" %>
+                  <%= link html_escape({:safe, "<i class='sign out icon'></i>Sign Out"}), to: admin_session_path(@conn, :delete, @current_user), method: "delete", class: "item" %>
+                <%= end %>
+                <%= if @conn.request_path == "/admin/resources" do %>
+                  <%= link html_escape({:safe, "<i class='users icon'></i>Users & Memberships"}), to: admin_path(@conn, :index), class: "item" %>
+                  <%= link html_escape({:safe, "<i class='hospital icon'></i>Facilities"}), to: admin_facility_path(@conn, :index), class: "item" %>
+                  <%= link html_escape({:safe, "<i class='talk icon'></i>Enquiries"}), to: admin_enquiry_path(@conn, :index), class: "item" %>
+                  <%= link html_escape({:safe, "<i class='calendar icon'></i>Events"}), to: admin_event_path(@conn, :index), class: "item" %>
+                  <%= link html_escape({:safe, "<i class='university icon'></i>Resources"}), to: admin_resource_path(@conn, :index), class: "active item" %>
+                  <%= link html_escape({:safe, "<i class='payment icon'></i>Payments History"}), to: payment_log_path(@conn, :index), class: "item" %>
+                  <%= link html_escape({:safe, "<i class='setting icon'></i>Global Settings"}), to: admin_setting_path(@conn, :index), class: "item" %>
+                  <%= link html_escape({:safe, "<i class='sign out icon'></i>Sign Out"}), to: admin_session_path(@conn, :delete, @current_user), method: "delete", class: "item" %>
+                <%= end %>
+                <%= if Regex.match?(~r/\/admin\/resources\/edit\/\d+$/, @conn.request_path) do %>
+                  <%= link html_escape({:safe, "<i class='users icon'></i>Users & Memberships"}), to: admin_path(@conn, :index), class: "item" %>
+                  <%= link html_escape({:safe, "<i class='hospital icon'></i>Facilities"}), to: admin_facility_path(@conn, :index), class: "item" %>
+                  <%= link html_escape({:safe, "<i class='talk icon'></i>Enquiries"}), to: admin_enquiry_path(@conn, :index), class: "item" %>
+                  <%= link html_escape({:safe, "<i class='calendar icon'></i>Events"}), to: admin_event_path(@conn, :index), class: "item" %>
+                  <%= link html_escape({:safe, "<i class='university icon'></i>Resources"}), to: admin_resource_path(@conn, :index), class: "active item" %>
+                  <%= link html_escape({:safe, "<i class='payment icon'></i>Payments History"}), to: payment_log_path(@conn, :index), class: "item" %>
+                  <%= link html_escape({:safe, "<i class='setting icon'></i>Global Settings"}), to: admin_setting_path(@conn, :index), class: "item" %>
+                  <%= link html_escape({:safe, "<i class='sign out icon'></i>Sign Out"}), to: admin_session_path(@conn, :delete, @current_user), method: "delete", class: "item" %>
+                <%= end %>
+                <%= if @conn.request_path == "/admin/resources/new" do %>
+                  <%= link html_escape({:safe, "<i class='users icon'></i>Users & Memberships"}), to: admin_path(@conn, :index), class: "item" %>
+                  <%= link html_escape({:safe, "<i class='hospital icon'></i>Facilities"}), to: admin_facility_path(@conn, :index), class: "item" %>
+                  <%= link html_escape({:safe, "<i class='talk icon'></i>Enquiries"}), to: admin_enquiry_path(@conn, :index), class: "item" %>
+                  <%= link html_escape({:safe, "<i class='calendar icon'></i>Events"}), to: admin_event_path(@conn, :index), class: "item" %>
+                  <%= link html_escape({:safe, "<i class='university icon'></i>Resources"}), to: admin_resource_path(@conn, :index), class: "active item" %>
+                  <%= link html_escape({:safe, "<i class='payment icon'></i>Payments History"}), to: payment_log_path(@conn, :index), class: "item" %>
+                  <%= link html_escape({:safe, "<i class='setting icon'></i>Global Settings"}), to: admin_setting_path(@conn, :index), class: "item" %>
+                  <%= link html_escape({:safe, "<i class='sign out icon'></i>Sign Out"}), to: admin_session_path(@conn, :delete, @current_user), method: "delete", class: "item" %>
+                <%= end %>
+                <%= if @conn.request_path == "/admin/payments" do %>
+                  <%= link html_escape({:safe, "<i class='users icon'></i>Users & Memberships"}), to: admin_path(@conn, :index), class: "item" %>
+                  <%= link html_escape({:safe, "<i class='hospital icon'></i>Facilities"}), to: admin_facility_path(@conn, :index), class: "item" %>
+                  <%= link html_escape({:safe, "<i class='talk icon'></i>Enquiries"}), to: admin_enquiry_path(@conn, :index), class: "item" %>
+                  <%= link html_escape({:safe, "<i class='calendar icon'></i>Events"}), to: admin_event_path(@conn, :index), class: "item" %>
+                  <%= link html_escape({:safe, "<i class='university icon'></i>Resources"}), to: admin_resource_path(@conn, :index), class: "item" %>
+                  <%= link html_escape({:safe, "<i class='payment icon'></i>Payments History"}), to: payment_log_path(@conn, :index), class: "active item" %>
+                  <%= link html_escape({:safe, "<i class='setting icon'></i>Global Settings"}), to: admin_setting_path(@conn, :index), class: "item" %>
+                  <%= link html_escape({:safe, "<i class='sign out icon'></i>Sign Out"}), to: admin_session_path(@conn, :delete, @current_user), method: "delete", class: "item" %>
+                <%= end %>
+                <%= if @conn.request_path == "/admin/settings" do %>
+                  <%= link html_escape({:safe, "<i class='users icon'></i>Users & Memberships"}), to: admin_path(@conn, :index), class: "item" %>
+                  <%= link html_escape({:safe, "<i class='hospital icon'></i>Facilities"}), to: admin_facility_path(@conn, :index), class: "item" %>
+                  <%= link html_escape({:safe, "<i class='talk icon'></i>Enquiries"}), to: admin_enquiry_path(@conn, :index), class: "item" %>
+                  <%= link html_escape({:safe, "<i class='calendar icon'></i>Events"}), to: admin_event_path(@conn, :index), class: "item" %>
+                  <%= link html_escape({:safe, "<i class='university icon'></i>Resources"}), to: admin_resource_path(@conn, :index), class: "item" %>
+                  <%= link html_escape({:safe, "<i class='payment icon'></i>Payments History"}), to: payment_log_path(@conn, :index), class: "item" %>
+                  <%= link html_escape({:safe, "<i class='setting icon'></i>Global Settings"}), to: admin_setting_path(@conn, :index), class: "active item" %>
+                  <%= link html_escape({:safe, "<i class='sign out icon'></i>Sign Out"}), to: admin_session_path(@conn, :delete, @current_user), method: "delete", class: "item" %>
+                <%= end %>
+                <%= if Regex.match?(~r/\/admin\/packages\/edit\/\d+$/, @conn.request_path) do %>
+                  <%= link html_escape({:safe, "<i class='users icon'></i>Users & Memberships"}), to: admin_path(@conn, :index), class: "item" %>
+                  <%= link html_escape({:safe, "<i class='hospital icon'></i>Facilities"}), to: admin_facility_path(@conn, :index), class: "active item" %>
+                  <%= link html_escape({:safe, "<i class='talk icon'></i>Enquiries"}), to: admin_enquiry_path(@conn, :index), class: "item" %>
+                  <%= link html_escape({:safe, "<i class='calendar icon'></i>Events"}), to: admin_event_path(@conn, :index), class: "item" %>
+                  <%= link html_escape({:safe, "<i class='university icon'></i>Resources"}), to: admin_resource_path(@conn, :index), class: "item" %>
+                  <%= link html_escape({:safe, "<i class='payment icon'></i>Payments History"}), to: payment_log_path(@conn, :index), class: "item" %>
+                  <%= link html_escape({:safe, "<i class='setting icon'></i>Global Settings"}), to: admin_setting_path(@conn, :index), class: "item" %>
+                  <%= link html_escape({:safe, "<i class='sign out icon'></i>Sign Out"}), to: admin_session_path(@conn, :delete, @current_user), method: "delete", class: "item" %>
+                <%= end %>
+                <%= if Regex.match?(~r/\/admin\/facilities\/package\/edit\/\d+$/, @conn.request_path) do %>
+                  <%= link html_escape({:safe, "<i class='users icon'></i>Users & Memberships"}), to: admin_path(@conn, :index), class: "item" %>
+                  <%= link html_escape({:safe, "<i class='hospital icon'></i>Facilities"}), to: admin_facility_path(@conn, :index), class: "active item" %>
+                  <%= link html_escape({:safe, "<i class='talk icon'></i>Enquiries"}), to: admin_enquiry_path(@conn, :index), class: "item" %>
+                  <%= link html_escape({:safe, "<i class='calendar icon'></i>Events"}), to: admin_event_path(@conn, :index), class: "item" %>
+                  <%= link html_escape({:safe, "<i class='university icon'></i>Resources"}), to: admin_resource_path(@conn, :index), class: "item" %>
+                  <%= link html_escape({:safe, "<i class='payment icon'></i>Payments History"}), to: payment_log_path(@conn, :index), class: "item" %>
+                  <%= link html_escape({:safe, "<i class='setting icon'></i>Global Settings"}), to: admin_setting_path(@conn, :index), class: "item" %>
+                  <%= link html_escape({:safe, "<i class='sign out icon'></i>Sign Out"}), to: admin_session_path(@conn, :delete, @current_user), method: "delete", class: "item" %>
+                <%= end %>
+              </div>
+          </div>
+      </div>
+
+      <div class="ui container middle aligned">
+
+          <%= render @view_module, @view_template, assigns %>
+      </div>
+
+    </div>
+  </body>
+  <footer>
+      <div id="copyrights">
+          <div class="inset">
+              <div class="bigcontainer">
+                  <div class="fl">
+                      <div class="logo"></div>
+                      <p>&copy; 2016 MSQH Members Website. All Rights Reserved.<br />
+                          <a href="http://www.msqh.com.my/msqh/" target="_blank">Malaysian Society for Quality in Health</a><br/>
+                          <a href="https://izaak.my" class="ui grey mini icon label izaak" target="_blank">
+                            <i class="cube icon"></i>
+                            Built by Izaak&trade;
+                          </a>
+                      </p>
+                  </div>
+              </div>
+
+          </div>
+      </div>
+      <script src="<%= static_path(@conn, "/js/vendor.js") %>"></script>
+      <script src="<%= static_path(@conn, "/js/app.js") %>"></script>
+  </footer>
+</html>

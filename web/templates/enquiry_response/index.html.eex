@@ -1,0 +1,30 @@
+<h2>Listing enquiry responses</h2>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>Subject</th>
+      <th>Message</th>
+      <th>Enquiry</th>
+
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+<%= for enquiry_response <- @enquiry_responses do %>
+    <tr>
+      <td><%= enquiry_response.subject %></td>
+      <td><%= enquiry_response.message %></td>
+      <td><%= enquiry_response.enquiry_id %></td>
+
+      <td class="text-right">
+        <%= link "Show", to: enquiry_response_path(@conn, :show, enquiry_response), class: "btn btn-default btn-xs" %>
+        <%= link "Edit", to: enquiry_response_path(@conn, :edit, enquiry_response), class: "btn btn-default btn-xs" %>
+        <%= link "Delete", to: enquiry_response_path(@conn, :delete, enquiry_response), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-danger btn-xs" %>
+      </td>
+    </tr>
+<% end %>
+  </tbody>
+</table>
+
+<%= link "New enquiry response", to: enquiry_response_path(@conn, :new) %>

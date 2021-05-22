@@ -1,0 +1,198 @@
+<div class="ui grid">
+  <div class="six wide column">
+    <div class="ui breadcrumb">
+      <%= link "Dashboard", to: admin_path(@conn, :index) %>
+      <div class="divider"> / </div>
+      <div class="active section">Global Settings</div>
+    </div>
+    <h3 class="ui dividing header">
+      <i class="large mail icon"></i>
+      <div class="content">Email Notification Setup</div>
+    </h3>
+    <div class="ui segment">
+
+      <%= render "edit_notify_user.html", changeset: @membership_setting_changeset,
+                              action: admin_setting_path(@conn, :edit_expiration_notification) %>
+    </div>
+    <%= if @current_user.state == "SUPERADMIN" do %>
+      <h3 class="ui dividing header">
+        <i class="large users icon"></i>
+        <div class="content">Admin Management</div>
+      </h3>
+      <%= if Enum.count(@admins) > 0 do %>
+      <div class="ui segment">
+        <!-- List of admins -->
+        <%= for admin <- @admins do %>
+        <div class="ui list">
+          <div class="item">
+            <img class="ui avatar image" src="/images/avatar-admin.png">
+            <div class="content">
+              <div class="header"><%= admin.username %></div>
+              <div class="description"><%= admin.email %></div>
+            </div>
+            <div class="right floated content">
+              <%= link html_escape({:safe, "<i class='large delete icon'></i>"}), to: admin_setting_path(@conn, :delete_admin, admin), method: :delete, data: [confirm: "Are you sure you want to delete " <> admin.username <> "?"],  class: "btn btn-default btn-xs" %>
+            </div>
+          </div>
+        </div>
+        <%= end %>
+        <div class="ui divider"></div>
+        <h4 class="ui dividing header">
+          <i class="add user icon"></i>
+          <div class="content">New admin</div>
+        </h4>
+          <p>
+            <%= render "register.html", changeset: @register_changeset,
+                                    action: admin_setting_path(@conn, :create_admin) %>
+          </p>
+      </div>
+      <%= else %>
+      <div class="ui segment">
+        <p>No admin registered</p>
+        <div class="ui divider"></div>
+        <h4 class="ui dividing header">
+          <i class="add user icon"></i>
+          <div class="content">New admin</div>
+        </h4>
+          <p>
+            <%= render "register.html", changeset: @register_changeset,
+                                    action: admin_setting_path(@conn, :create_admin) %>
+          </p>
+      </div>
+      <%= end %>
+    <%= end %>
+  </div>
+  <div class="ten wide column">
+    <h3 class="ui dividing header">
+      <i class="large setting icon"></i>
+      <div class="content">Global Defaults</div>
+    </h3>
+    <div class="ui secondary menu fluid steps">
+      <a class="step item active" data-tab="membership-category">Membership Categories</a>
+      <a class="step item" data-tab="membership-type">Membership Types</a>
+      <a class="step item" data-tab="default-prices">Default Prices</a>
+      <a class="step item" data-tab="facilities">Facilities</a>
+      <a class="step item" data-tab="payment-methods">Payment Methods</a>
+    </div>
+
+    <div class="ui active tab segment" data-tab="membership-category">
+      <h4 class="ui dividing header">Membership Categories</h4>
+      <div class="ui relaxed list">
+        <%= for membership_category <- @membership_categories do %>
+        <div class="item">
+          <i class="large caret right icon"></i>
+          <div class="content">
+            <div class="header">
+              <div class="ui teal label">
+                <%= membership_category.membership_category_name %>
+              </div>
+              <div class="ui yellow label">
+                Created
+                <div class="detail"><%= Timex.Timezone.convert(membership_category.updated_at, "Asia/Kuala_Lumpur") |>
+                Timex.format!("%A, %b %d, %Y %l:%M%P", :strftime) %></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <%= end %>
+      </div>
+      <h4 class="ui dividing header">Add Membership Category</h4>
+      <%= render "membership_category.html", changeset: @membership_category_changeset,
+                              action: admin_setting_path(@conn, :create_membership_category) %>
+    </div>
+    <div class="ui tab segment" data-tab="membership-type">
+      <h4 class="ui dividing header">Membership Types</h4>
+      <div class="ui relaxed list">
+        <%= for membership_type <- @membership_types do %>
+        <div class="item">
+          <i class="large caret right icon"></i>
+          <div class="content">
+            <div class="header">
+              <div class="ui teal label">
+                <%= membership_type.membership_type_name %>
+              </div>
+              <div class="ui yellow label">
+                Created
+                <div class="detail"><%= Timex.Timezone.convert(membership_type.updated_at, "Asia/Kuala_Lumpur") |>
+                Timex.format!("%A, %b %d, %Y %l:%M%P", :strftime) %></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <%= end %>
+      </div>
+      <h4 class="ui dividing header">Add Membership Type</h4>
+      <%= render "membership_type.html", changeset: @membership_type_changeset,
+                              action: admin_setting_path(@conn, :create_membership_type)%>
+    </div>
+    <div class="ui tab segment" data-tab="default-prices">
+      <h4 class="ui dividing header">Default Prices</h4>
+        <div class="ui relaxed list">
+          <%= for default_price <- @default_prices do %>
+          <div class="item">
+            <i class="large caret right icon"></i>
+            <div class="content">
+              <div class="header">
+                <div class="ui blue label">
+                  <%= unless is_nil(default_price.life_membership_price) do %>
+                    <%= default_price.life_membership_price %>
+                  <%= end %>
+                  <%= unless is_nil(default_price.new_member_annual_price) do %>
+                    <%= default_price.new_member_annual_price %>
+                  <%= end %>
+                  <%= unless is_nil(default_price.renewal_existing_member_annual_price) do %>
+                    <%= default_price.renewal_existing_member_annual_price %>
+                  <%= end %>
+                </div>
+                <%= unless is_nil(default_price.membership_category) do %>
+                  <div class="ui teal label">
+                    Category
+                    <div class="detail">
+                      <%= default_price.membership_category.membership_category_name %>
+                    </div>
+                  </div>
+                  <%= end %>
+                <%= unless is_nil(default_price.membership_type) do %>
+                <div class="ui yellow label">
+                  Type
+                  <div class="detail"><%= default_price.membership_type.membership_type_name %></div>
+                </div>
+                <%= end %>
+              </div>
+            </div>
+        </div>
+        <%= end %>
+      </div>
+      <h4 class="ui dividing header">Add Default Price</h4>
+      <%= render "default_price.html", changeset: @default_price_changeset,
+                              action: admin_setting_path(@conn, :create_default_price),
+                              membership_types: @membership_types_list,
+                              membership_categories: @membership_categories_list %>
+    </div>
+    <div class="ui tab segment" data-tab="facilities">
+      <%= link html_escape({:safe,"<i class='hospital icon'></i>Go to Facilities Page"}), to: admin_facility_path(@conn, :index), class: "ui fluid large teal submit button", target: "_blank" %>
+    </div>
+    <div class="ui tab segment" data-tab="payment-methods">
+      <h4 class="ui dividing header">Payment Methods</h4>
+      <div class="ui relaxed list">
+          <%= for payment_type <- @payment_types do %>
+          <div class="item">
+            <i class="large caret right icon"></i>
+            <div class="content">
+              <div class="header">
+                <div class="ui yellow label">
+                  <%= payment_type.name %>
+                </div>
+              </div>
+            </div>
+        </div>
+        <%= end %>
+      </div>
+      <h4 class="ui dividing header">Add Payment Method</h4>
+      <%= render "payment_type.html", changeset: @payment_type_changeset,
+                        action: admin_setting_path(@conn, :create_payment_type) %>
+
+    </div>
+
+  </div>
+</div>

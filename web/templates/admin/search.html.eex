@@ -1,0 +1,7 @@
+<%= form_for @changeset, @action, fn f -> %>
+<div class="ui action left fluid icon input">
+  <i class="search icon"></i>
+    <%= text_input f, :username, placeholder: "Search..."%>
+    <%= submit "Search", class: "ui teal button" %>
+</div>
+<% end %>

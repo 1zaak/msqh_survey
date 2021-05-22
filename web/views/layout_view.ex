@@ -1,3 +1,3 @@
-defmodule Msqh.LayoutView do
-  use Msqh.Web, :view
+defmodule MsqhPortal.LayoutView do
+  use MsqhPortal.Web, :view
 end

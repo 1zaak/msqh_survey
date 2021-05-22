@@ -1,0 +1,40 @@
+<%= form_for @changeset, @action, [multipart: true, class: "ui large form"], fn f -> %>
+  <%= if @changeset.action do %>
+    <div class="ui error message alert alert-danger">
+      <p>Oops, something went wrong! Please check the errors below.</p>
+    </div>
+  <% end %>
+  <div class="ui emphasis segment">
+    <div class="field">
+      <%= label f, :payment_type_id, "Payment Type", class: "control-label" %>
+      <%= select f, :payment_type_id, @payment_types, class: "ui fluid dropdown",prompt: "Choose Payment Types" %>
+      <%= error_tag f, :payment_type_id %>
+    </div>
+
+    <div class="fields">
+      <%= hidden_input f, :rate, [class: "form-control", value: @price] %>
+      <%= if is_nil(@proof_payment_path) do %>
+        <div class="sixteen wide field">
+          <%= label f, :proof_payment_path, "Proof of Payment", class: "control-label" %>
+          <%= file_input f, :proof_payment_path, class: "form-control" %>
+          <%= error_tag f, :proof_payment_path %>
+        </div>
+      <%= else %>
+        <div class="eight wide field">
+          <%= label f, :proof_payment_path, "Proof of Payment", class: "control-label" %>
+          <%= file_input f, :proof_payment_path, class: "form-control" %>
+          <%= error_tag f, :proof_payment_path %>
+        </div>
+        <div class="eight wide field">
+          <br/>
+            <%= link html_escape({:safe, "<p class='ui big violet label'><i class='camera retro icon'></i>Uploaded Proof</p>"}), to: @proof_payment_path, target: "_blank" %>
+        </div>
+      <% end %>
+
+    </div>
+
+    <div class="field">
+      <%= submit "Submit", class: "ui large olive submit button" %>
+    </div>
+  </div>
+<% end %>

@@ -1,0 +1,87 @@
+<div class="ui grid">
+  <!--the vertical side menu-->
+  <div class="four wide column">
+      <div class="verticalMenu">
+          <div class="ui vertical pointing menu fluid">
+              <%= link html_escape({:safe, "<i class='home icon'></i>Home"}), to: user_path(@conn, :index), class: "item" %>
+              <%= link html_escape({:safe, "<i class='user icon'></i>Profile"}), to: profile_path(@conn, :index), class: "item" %>
+              <%= link html_escape({:safe, "<i class='payment icon'></i>Payment History"}), to: user_payment_path(@conn, :index), class: "item" %>
+              <%= link html_escape({:safe, "<i class='users icon'></i>Renew Membership"}), to: user_membership_path(@conn, :index), class: "item" %>
+              <%= link html_escape({:safe, "<i class='calendar icon'></i>Events"}), to: user_event_path(@conn, :index), class: "item" %>
+              <%= link html_escape({:safe, "<i class='birthday icon'></i>Vouchers"}), to: user_rebate_path(@conn, :index), class: "teal item" %>
+              <%= link html_escape({:safe, "<i class='university icon'></i>Resources"}), to: user_resource_path(@conn, :index), class: "item" %>
+              <%= link html_escape({:safe, "<i class='info icon'></i>Help"}), to: user_enquiry_path(@conn, :index), class: "active teal item" %>
+          </div>
+      </div>
+  </div>
+
+  <!--the main content-->
+  <div class="twelve wide column">
+    <div class="pageHeader">
+      <div class="segment">
+        <h3 class="ui dividing header">
+          <i class="large talk icon"></i>
+          <div class="content">Enquiries
+          </div>
+        </h3>
+      </div>
+    </div>
+    <div class="ui grid">
+      <div class="ten wide column">
+        <%= unless Enum.count(@user_enquiries) < 1 do %>
+        <%= unless is_nil(@user_enquiries) do %>
+        <div class="ui comments">
+            <%= for user_enquiry <- @user_enquiries do %>
+            <div class="ui stacked segment">
+              <div class="comment">
+                <a class="avatar">
+                  <img src="/images/avatar.png">
+                </a>
+                <div class="content">
+                  <a class="author"><%= @current_user.username %></a>
+                  <div class="metadata">
+                    <span class="date"><%= Timex.Timezone.convert(user_enquiry.updated_at, "Asia/Kuala_Lumpur") |>
+                    Timex.format!("%b %d, %Y at %l:%M%P", :strftime) %></span>
+                  </div>
+                  <div class="text">
+                    <p><%= user_enquiry.message %> <%= unless is_nil(user_enquiry.enquiry_attachment_path) do %>
+                    <%= link html_escape({:safe, "<span class='ui tiny pink label'><i class='attach icon'></i>Attachment</span>"}), to: MsqhPortal.EnquiryAttachment.url({user_enquiry.enquiry_attachment_path, user_enquiry}, :original)
+                    |> String.split_at(13)
+                    |> Tuple.delete_at(0)
+                    |> Tuple.to_list
+                    |> Enum.join, target: "_blank"  %>
+                    <%= end %></p>
+                  </div>
+                </div>
+                <%= if Enum.count(user_enquiry.enquiry_responses) > 0 do %>
+                <div class="actions">
+                  <%= link html_escape({:safe, "Go to conversation (" <> to_string(Enum.count(user_enquiry.enquiry_responses)) <> ")"}), to: user_enquiry_path(@conn, :reply, user_enquiry), class: "reply"  %>
+                </div>
+                <%= end %>
+                <%= if Enum.count(user_enquiry.enquiry_responses) == 0 do %>
+                <div class="actions">
+                  <%= link html_escape({:safe, "Reply"}), to: user_enquiry_path(@conn, :reply, user_enquiry), class: "reply"  %>
+                </div>
+                <%= end %>
+                </div>
+            </div>
+            <%= end %>
+          </div>
+          <%= pagination_links @user_enquiries, view_style: :semantic%>
+          <%= end %>
+        <%= else %>
+        <div class="ui relaxed divided list">
+        No enquired recorded
+        </div>
+        <%= end %>
+      </div>
+      <div class="six wide column">
+        <div class="ui segment">
+        <h4 class="ui dividing header"><i class="outline comment icon"></i>New enquiry</h4>
+        <%= render "form.html", changeset: @changeset,
+                                action: user_enquiry_path(@conn, :create) %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

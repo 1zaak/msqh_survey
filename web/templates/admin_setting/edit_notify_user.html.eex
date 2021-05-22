@@ -1,0 +1,17 @@
+<%= form_for @changeset, @action, [class: "ui form"], fn f -> %>
+  <%= if @changeset.action do %>
+    <div class="alert alert-danger">
+      <p>Oops, something went wrong! Please check the errors below.</p>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= label f, :days_before_notify_expiration, "Days before notify member of expiration", class: "control-label" %>
+    <%= text_input f, :days_before_notify_expiration, class: "form-control" %>
+    <%= error_tag f, :days_before_notify_expiration %>
+  </div>
+
+  <div class="field">
+    <%= submit html_escape({:safe,"<i class='edit icon'></i>Save"}), class: "ui pink submit button" %>
+  </div>
+<% end %>

@@ -1,3 +1,3 @@
-defmodule Msqh.PageView do
-  use Msqh.Web, :view
+defmodule MsqhPortal.PageView do
+  use MsqhPortal.Web, :view
 end

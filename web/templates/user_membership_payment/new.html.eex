@@ -1,0 +1,75 @@
+<div class="ui grid">
+  <!--the vertical side menu-->
+  <div class="four wide column">
+      <div class="verticalMenu">
+          <div class="ui vertical pointing menu fluid">
+              <%= link html_escape({:safe, "<i class='home icon'></i>Home"}), to: user_path(@conn, :index), class: "item" %>
+              <%= link html_escape({:safe, "<i class='user icon'></i>Profile"}), to: profile_path(@conn, :index), class: "item" %>
+              <%= link html_escape({:safe, "<i class='payment icon'></i>Payment History"}), to: user_payment_path(@conn, :index), class: "item" %>
+              <%= link html_escape({:safe, "<i class='users icon'></i>Renew Membership"}), to: user_membership_path(@conn, :index), class: "active teal item" %>
+              <%= link html_escape({:safe, "<i class='calendar icon'></i>Events"}), to: user_event_path(@conn, :index), class: "item" %>
+              <%= link html_escape({:safe, "<i class='birthday icon'></i>Vouchers"}), to: user_rebate_path(@conn, :index), class: "teal item" %>
+              <%= link html_escape({:safe, "<i class='university icon'></i>Resources"}), to: user_resource_path(@conn, :index), class: "item" %>
+              <%= link html_escape({:safe, "<i class='info icon'></i>Help"}), to: user_enquiry_path(@conn, :index), class: "item" %>
+          </div>
+      </div>
+  </div>
+
+  <!--the main content-->
+  <div class="twelve wide column">
+    <div class="pageHeader">
+      <div class="segment">
+        <h3 class="ui dividing header">
+          <i class="large users icon"></i>
+          <div class="content">Renew Membership
+          </div>
+        </h3>
+      </div>
+    </div>
+
+    <div class="ui fluid steps">
+      <%= link html_escape({:safe, "<i class='tasks icon'></i><div class='content'><div class='title'>Selection</div></div>"}), to: user_membership_path(@conn, :index), class: "completed step" %>
+      <%= case @membership.state do %>
+
+      <%= "PAYMENT SELECTION" -> %>
+      <div class="completed step">
+          <i class="payment icon"></i>
+          <div class="content">
+              <div class="title">Payment</div>
+
+          </div>
+      </div>
+      <%= "MEMBERSHIP SELECTION" -> %>
+        <div class="disabled step">
+            <i class="payment icon"></i>
+            <div class="content">
+                <div class="title">Payment</div>
+
+            </div>
+        </div>
+      <%= "RECEIPT" -> %>
+        <%= link html_escape({:safe, "<i class='payment icon'></i><div class='content'><div class='title'>Payment</div></div>"}), to: user_membership_path(@conn, :index), class: "completed step" %>
+      <%= end %>
+
+      <div class="active step">
+          <i class="payment icon"></i>
+          <div class="content">
+              <div class="title">Payment</div>
+
+          </div>
+      </div>
+      <div class="disabled step">
+          <i class="barcode icon"></i>
+          <div class="content">
+              <div class="title">Receipt</div>
+          </div>
+      </div>
+    </div>
+
+    <%= render "form.html", changeset: @changeset,
+                            action: user_membership_path(@conn, :create),
+                            membership_types: @membership_types,
+                            membership_categories: @membership_categories,
+                            facilities: @facilities %><br/>
+  </div>
+</div>

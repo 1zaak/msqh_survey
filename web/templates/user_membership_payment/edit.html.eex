@@ -1,0 +1,132 @@
+<div class="ui grid">
+  <!--the vertical side menu-->
+  <div class="four wide column">
+      <div class="verticalMenu">
+          <div class="ui vertical pointing menu fluid">
+              <%= link html_escape({:safe, "<i class='home icon'></i>Home"}), to: user_path(@conn, :index), class: "item" %>
+              <%= link html_escape({:safe, "<i class='user icon'></i>Profile"}), to: profile_path(@conn, :index), class: "item" %>
+              <%= link html_escape({:safe, "<i class='payment icon'></i>Payment History"}), to: user_payment_path(@conn, :index), class: "item" %>
+              <%= link html_escape({:safe, "<i class='users icon'></i>Renew Membership"}), to: user_membership_path(@conn, :index), class: "active teal item" %>
+              <%= link html_escape({:safe, "<i class='calendar icon'></i>Events"}), to: user_event_path(@conn, :index), class: "item" %>
+              <%= link html_escape({:safe, "<i class='birthday icon'></i>Vouchers"}), to: user_rebate_path(@conn, :index), class: "teal item" %>
+              <%= link html_escape({:safe, "<i class='university icon'></i>Resources"}), to: user_resource_path(@conn, :index), class: "item" %>
+              <%= link html_escape({:safe, "<i class='info icon'></i>Help"}), to: user_enquiry_path(@conn, :index), class: "item" %>
+          </div>
+      </div>
+  </div>
+
+  <!--the main content-->
+  <div class="twelve wide column">
+    <div class="pageHeader">
+      <div class="segment">
+        <h3 class="ui dividing header">
+          <i class="large users icon"></i>
+          <div class="content">Payment Selection
+          </div>
+        </h3>
+      </div>
+    </div>
+
+    <div class="ui fluid steps">
+      <%= link html_escape({:safe, "<i class='tasks icon'></i><div class='content'><div class='title'>Membership</div></div>"}), to: user_membership_path(@conn, :new), class: "completed step" %>
+
+      <%= case @membership.state do %>
+
+      <%= "PAYMENT SELECTION" -> %>
+      <div class="active completed step">
+          <i class="payment icon"></i>
+          <div class="content">
+              <div class="title">Payment</div>
+
+          </div>
+      </div>
+      <div class="disabled step">
+          <i class="barcode icon"></i>
+          <div class="content">
+              <div class="title">Receipt</div>
+          </div>
+      </div>
+
+      <%= "MEMBERSHIP SELECTION" -> %>
+        <div class="active step">
+            <i class="payment icon"></i>
+            <div class="content">
+                <div class="title">Payment</div>
+
+            </div>
+        </div>
+        <div class="disabled step">
+            <i class="barcode icon"></i>
+            <div class="content">
+                <div class="title">Receipt</div>
+
+            </div>
+        </div>
+
+      <%= "RECEIPT" -> %>
+        <div class="active completed step">
+            <i class="barcode icon"></i>
+            <div class="content">
+                <div class="title">Receipt</div>
+
+            </div>
+        </div>
+
+        <%= link html_escape({:safe, "<i class='barcode icon'></i><div class='content'><div class='title'>Receipt</div></div>"}), to: user_membership_payment_path(@conn, :show, @membership), class: "completed step" %>
+
+      <%= end %>
+
+
+    </div>
+
+    <%= if @package.life_membership_price do %>
+      <div class="ui teal inverted segment">
+        <p>You have selected <strong>
+            <%= @membership.membership_category.membership_category_name %>
+              <%= unless is_nil(@membership.membership_type) do %>
+              (<%= @membership.membership_type.membership_type_name %>)
+              <%=end %>
+          </strong> which costs <strong><%= @package.life_membership_price %></strong>
+        </p>
+      </div>
+      <%= render "form.html", changeset: @changeset,
+                              action: user_membership_payment_path(@conn, :update, @membership),
+                              payment_types: @payment_types, proof_payment_path: @proof_payment_path,
+                              price: @package.life_membership_price %>
+    <%= end %>
+    <%= if @package.new_member_annual_price && @current_user.state == "INACTIVE" do %>
+      <div class="ui teal inverted segment">
+        <p>You have selected <strong>
+          <%= @membership.membership_category.membership_category_name %>
+            <%= unless is_nil(@membership.membership_type) do %>
+            (<%= @membership.membership_type.membership_type_name %>)
+            <%=end %>
+          </strong> which costs <strong><%= @package.new_member_annual_price %></strong>
+          for <b>new membership.</b>
+        </p>
+      </div>
+      <%= render "form.html", changeset: @changeset,
+                              action: user_membership_payment_path(@conn, :update, @membership),
+                              payment_types: @payment_types, proof_payment_path: @proof_payment_path,
+                              price: @package.new_member_annual_price %>
+    <%= end %>
+    <%= if @package.renewal_existing_member_annual_price && @current_user.state != "INACTIVE" do %>
+      <div class="ui teal inverted segment">
+        <p>You have selected <strong>
+          <%= @membership.membership_category.membership_category_name %>
+            <%= unless is_nil(@membership.membership_type) do %>
+            (<%= @membership.membership_type.membership_type_name %>)
+            <%=end %>
+          </strong> which costs <strong><%= @package.renewal_existing_member_annual_price %></strong>
+          for <b>renewal of membership.</b>
+        </p>
+      </div>
+      <%= render "form.html", changeset: @changeset,
+                              action: user_membership_payment_path(@conn, :update, @membership),
+                              payment_types: @payment_types, proof_payment_path: @proof_payment_path,
+                              price: @package.renewal_existing_member_annual_price %>
+    <%= end %>
+
+
+  </div>
+</div>

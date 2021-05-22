@@ -1,14 +1,23 @@
 {
-  "repository": {
+  "repository": {},
+  "license": "MIT",
+  "scripts": {
+    "deploy": "brunch build --production",
+    "watch": "brunch watch --stdin",
+    "semantic": "cp ./semantic/dist/semantic.css ./web/static/vendor/css && cp ./semantic/dist/semantic.min.js ./web/static/vendor/js && cp ./semantic/dist/themes/default/assets/images/flags.png ./web/static/assets/images/ && cp ./semantic/dist/themes/default/assets/fonts/* ./web/static/assets/fonts && cp ./node_modules/jquery/dist/jquery.min.js ./web/static/vendor/js"
   },
   "dependencies": {
-    "babel-brunch": "~6.0.0",
-    "brunch": "~2.1.3",
-    "clean-css-brunch": "~1.8.0",
-    "css-brunch": "~1.7.0",
-    "javascript-brunch": "~1.8.0",
-    "uglify-js-brunch": "~1.7.0",
+    "jquery": "^3.1.1",
     "phoenix": "file:deps/phoenix",
-    "phoenix_html": "file:deps/phoenix_html"
+    "phoenix_html": "file:deps/phoenix_html",
+    "semantic-ui": "^2.2.7"
+  },
+  "devDependencies": {
+    "babel-brunch": "~6.0.0",
+    "brunch": "2.7.4",
+    "clean-css-brunch": "~2.0.0",
+    "css-brunch": "~2.0.0",
+    "javascript-brunch": "~2.0.0",
+    "uglify-js-brunch": "~2.0.1"
   }
 }

@@ -1,0 +1,71 @@
+<h3 class="ui dividing header">
+  <i class="large calendar icon"></i>
+  <div class="content">Events
+  </div>
+</h3>
+<div class="ui breadcrumb">
+  <%= link "Dashboard", to: admin_path(@conn, :index) %>
+  <div class="divider"> / </div>
+  <div class="active section">Events</div>
+</div>
+<%= unless Enum.count(@events) < 1 do %>
+<table class="ui padded table">
+  <thead>
+    <tr>
+      <th>Title</th>
+      <th>Active From</th>
+      <th>Active To</th>
+      <th>Description</th>
+      <th>Location</th>
+      <th>Admission Price</th>
+      <th>Rebates</th>
+      <th>Action</th>
+      <th>Updated At</th>
+      <th>Active?</th>
+    </tr>
+  </thead>
+  <tbody>
+    <%= if Enum.count(@events) < 1 do %>
+      No events created
+    <%= end %>
+<%= for event <- @events do %>
+    <tr>
+      <td><%= event.title %></td>
+      <td><%= Timex.Timezone.convert(event.active_from, "Asia/Kuala_Lumpur") |>
+      Timex.format!("%A, %b %d, %Y %l:%M%P", :strftime) %></td>
+      <td><%= Timex.Timezone.convert(event.active_to, "Asia/Kuala_Lumpur") |>
+      Timex.format!("%A, %b %d, %Y %l:%M%P", :strftime) %></td>
+      <td><%= event.description %></td>
+      <td><%= event.location %></td>
+      <td><%= event.admission_price %></td>
+      <td class="center aligned"><%= link html_escape({:safe, "<i class='large percent icon'></i>"}), to: admin_event_path(@conn, :show, event), class: "btn btn-default btn-xs" %></td>
+      <td class="center aligned">
+        <%= link html_escape({:safe, "<i class='large edit icon'></i>"}), to: admin_event_path(@conn, :edit, event), class: "btn btn-default btn-xs" %>
+        <%= if is_nil(event.vouchers) do %>
+          <%= link html_escape({:safe, "<i class='large delete icon'></i>"}), to: admin_event_path(@conn, :delete, event), method: :delete, data: [confirm: "Are you sure you want to delete " <> event.title <> "?"],  class: "btn btn-default btn-xs" %>
+        <%= end %>
+      </td>
+      <td><%= Timex.Timezone.convert(event.updated_at, "Asia/Kuala_Lumpur") |>
+      Timex.format!("%a, %b %d, %Y %l:%M%P", :strftime) %></td>
+      <td class="ui center aligned header">
+        <%= if Timex.compare(event.active_to, Timex.now(), :days) == 1 do %>
+          <i class='large green checkmark icon'></i>
+        <%= end %>
+        <%= if Timex.compare(event.active_to, Timex.now(), :days) == -1 do %>
+          <i class='large red remove icon'></i>
+        <%= end %>
+        <%= if Timex.compare(event.active_to, Timex.now(), :days) == 0 do %>
+          <i class='large blue checkmark icon'></i>
+        <%= end %>
+      </td>
+    </tr>
+<% end %>
+  </tbody>
+</table>
+<%= else %>
+<div class="ui relaxed divided list">
+No events created
+</div>
+<%= end %>
+<%= pagination_links @events, view_style: :semantic%>
+<%= link html_escape({:safe, "<i class='large plus icon'></i>Add Event"}), to: admin_event_path(@conn, :new), class: "ui large teal label" %>

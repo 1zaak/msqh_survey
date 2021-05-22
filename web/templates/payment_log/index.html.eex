@@ -1,0 +1,132 @@
+<h3 class="ui dividing header">
+  <i class="large payment icon"></i>
+  <div class="content">Payment History
+  </div>
+</h3>
+<div class="ui breadcrumb">
+  <%= link "Dashboard", to: admin_path(@conn, :index) %>
+  <div class="divider"> / </div>
+  <div class="active section">Payment History</div>
+</div>
+<%= unless Enum.count(@payment_logs) < 1 do %>
+<table class="ui table">
+
+  <thead>
+    <tr>
+      <th class="two wide">Logged At</th>
+      <th class="one wide">Member</th>
+      <th class="one wide">Member State</th>
+      <th class="one wide">Verified by Admin</th>
+      <th class="two wide">Membership Expiration</th>
+      <th class="two wide">Payment Method</th>
+      <th class="one wide">Facility</th>
+      <th class="two wide">Membership Category</th>
+      <th class="one wide">Membership Type</th>
+      <th class="one wide">Price</th>
+      <th class="one wide">Verified</th>
+    </tr>
+  </thead>
+
+  <tbody>
+<%= for payment_log <- @payment_logs do %>
+  <%= if payment_log.payment_verified do %>
+    <tr>
+  <%= else %>
+    <tr class="warning">
+  <%= end %>
+      <td><%= unless is_nil(payment_log.updated_at) do %>
+        <%= Timex.Timezone.convert(payment_log.updated_at, "Asia/Kuala_Lumpur") |>
+        Timex.format!("%A, %b %d, %Y %l:%M%P", :strftime) %>
+        <%= else %>
+          -
+        <%= end %>
+      </td>
+      <td>
+      <%= unless is_nil(payment_log.member) do %>
+        <%= link payment_log.member.username, to: admin_path(@conn, :show, payment_log.member), target: "_blank"  %>
+      <%= else %>
+        -
+      <%= end %>
+
+      </td>
+      <td><%= unless is_nil(payment_log.receipt_path) do %>
+      <%= link html_escape({:safe, "RECEIPT"}), to: MsqhPortal.Receipt.url({payment_log.receipt_path, payment_log.membership}, :original)
+      |> String.split_at(12)
+      |> Tuple.delete_at(0)
+      |> Tuple.to_list
+      |> Enum.join, target: "_blank"  %>
+        <%= else %>
+        <%= payment_log.state %>
+      <%= end %>
+      </td>
+      <td>
+      <%= unless is_nil(payment_log.admin) do %>
+        <%= payment_log.admin.username %>
+      <%= else %>
+        -
+      <%= end %>
+
+      </td>
+      <td><%= unless is_nil(payment_log.active_to) do %>
+        <%= Timex.Timezone.convert(payment_log.active_to, "Asia/Kuala_Lumpur") |>
+        Timex.format!("%b %d, %Y", :strftime) %>
+        <%= else %>
+          -
+        <%= end %>
+      </td>
+      <td><%= unless is_nil(payment_log.membership.proof_payment_path) do %>
+      <%= link payment_log.payment_type.name, to: MsqhPortal.ProofPayment.url({payment_log.membership.proof_payment_path, payment_log.membership}, :original)
+      |> String.split_at(12)
+      |> Tuple.delete_at(0)
+      |> Tuple.to_list
+      |> Enum.join, target: "_blank"  %>
+        <%= else %>
+        <%= payment_log.payment_type.name %>
+        <%= end %>
+      </td>
+      <td><%= payment_log.facility.facility_name %></td>
+      <td><%= payment_log.membership_category.membership_category_name %></td>
+
+      <td>
+      <%= unless is_nil(payment_log.membership_type) do %>
+        <%= payment_log.membership_type.membership_type_name %>
+      <%= else %>
+        -
+      <%= end %>
+      </td>
+
+      <td>
+        <%= unless is_nil(payment_log.package.life_membership_price) do %>
+          <%= if payment_log.rate == payment_log.package.life_membership_price do %>
+            <%= payment_log.package.life_membership_price %> <div class="ui small violet horizontal label">Life</div>
+          <%= end %>
+        <%= end %>
+        <%= unless is_nil(payment_log.package.new_member_annual_price) do %>
+          <%= if payment_log.rate == payment_log.package.new_member_annual_price do %>
+            <%= payment_log.package.new_member_annual_price %> <div class="ui small pink horizontal label">New</div>
+          <%= end %>
+        <%= end %>
+        <%= unless is_nil(payment_log.package.renewal_existing_member_annual_price) do %>
+          <%= if payment_log.rate == payment_log.package.renewal_existing_member_annual_price do %>
+            <%= payment_log.package.renewal_existing_member_annual_price %> <div class="ui small blue horizontal label">Renewal</div>
+          <%= end %>
+        <%= end %>
+      </td>
+
+      <td class="ui center aligned header">
+        <%= if payment_log.payment_verified do %>
+          <i class='green checkmark icon'></i>
+          <%= else %>
+          <i class='red remove icon'></i>
+        <%= end %>
+      </td>
+    </tr>
+<% end %>
+  </tbody>
+</table>
+<%= else %>
+<div class="ui relaxed divided list">
+No payment logged
+</div>
+<%= end %>
+<%= pagination_links @payment_logs, view_style: :semantic%>

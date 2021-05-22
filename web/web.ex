@@ -1,12 +1,12 @@
-defmodule Msqh.Web do
+defmodule MsqhPortal.Web do
   @moduledoc """
   A module that keeps using definitions for controllers,
   views and so on.
 
   This can be used in your application as:
 
-      use Msqh.Web, :controller
-      use Msqh.Web, :view
+      use MsqhPortal.Web, :controller
+      use MsqhPortal.Web, :view
 
   The definitions below will be executed for every view,
   controller, etc, so keep them short and clean, focused
@@ -19,10 +19,11 @@ defmodule Msqh.Web do
   def model do
     quote do
       use Ecto.Schema
-
+      use Timex.Ecto.Timestamps
+      
       import Ecto
       import Ecto.Changeset
-      import Ecto.Query, only: [from: 1, from: 2]
+      import Ecto.Query
     end
   end
 
@@ -30,12 +31,12 @@ defmodule Msqh.Web do
     quote do
       use Phoenix.Controller
 
-      alias Msqh.Repo
+      alias MsqhPortal.Repo
       import Ecto
-      import Ecto.Query, only: [from: 1, from: 2]
+      import Ecto.Query
 
-      import Msqh.Router.Helpers
-      import Msqh.Gettext
+      import MsqhPortal.Router.Helpers
+      import MsqhPortal.Gettext
     end
   end
 
@@ -49,9 +50,9 @@ defmodule Msqh.Web do
       # Use all HTML functionality (forms, tags, etc)
       use Phoenix.HTML
 
-      import Msqh.Router.Helpers
-      import Msqh.ErrorHelpers
-      import Msqh.Gettext
+      import MsqhPortal.Router.Helpers
+      import MsqhPortal.ErrorHelpers
+      import MsqhPortal.Gettext
     end
   end
 
@@ -65,10 +66,10 @@ defmodule Msqh.Web do
     quote do
       use Phoenix.Channel
 
-      alias Msqh.Repo
+      alias MsqhPortal.Repo
       import Ecto
-      import Ecto.Query, only: [from: 1, from: 2]
-      import Msqh.Gettext
+      import Ecto.Query
+      import MsqhPortal.Gettext
     end
   end
 

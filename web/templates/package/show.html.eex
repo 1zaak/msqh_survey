@@ -1,0 +1,33 @@
+<h2>Show payment</h2>
+
+<ul>
+
+  <li>
+    <strong>Amount:</strong>
+    <%= @payment.facility_name %>
+  </li>
+
+  <li>
+    <strong>For period:</strong>
+    <%= @payment.membership_category_id %>
+  </li>
+
+  <li>
+    <strong>User:</strong>
+    <%= @payment.membership_type_id %>
+  </li>
+
+  <li>
+    <strong>Amount:</strong>
+    <%= @payment.annual_price %>
+  </li>
+
+  <li>
+    <strong>For period:</strong>
+    <%= @payment.facility_id %>
+  </li>
+
+</ul>
+
+<%= link "Edit", to: payment_path(@conn, :edit, @payment) %>
+<%= link "Back", to: payment_path(@conn, :index) %>

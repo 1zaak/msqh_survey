@@ -1,0 +1,26 @@
+<h2>Global Membership Settings</h2>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>Notify Users of Expiration (Days)</th>
+
+
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+<%= for membership_setting <- @membership_settings do %>
+    <tr>
+      <td><%= membership_setting.days_before_notify_expiration %></td>
+
+      <td class="text-right">
+        <%= link "Edit", to: admin_membership_setting_path(@conn, :edit, membership_setting), class: "btn btn-default btn-xs" %>
+      </td>
+    </tr>
+<% end %>
+  </tbody>
+</table>
+
+<%= link "New notification", to: admin_membership_setting_path(@conn, :new) %><br/>
+<%= link "Back", to: admin_path(@conn, :index) %>

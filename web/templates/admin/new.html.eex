@@ -1,0 +1,6 @@
+<h2>New admin</h2>
+
+<%= render "register.html", changeset: @changeset,
+                        action: admin_path(@conn, :create)%>
+
+<%= link "Back", to: admin_login_path(@conn, :index) %>

@@ -1,0 +1,6 @@
+<h2>Edit membership</h2>
+
+<%= render "form.html", changeset: @changeset,
+                        action: membership_type_path(@conn, :update, @membership_type) %>
+
+<%= link "Back", to: membership_type_path(@conn, :index) %>

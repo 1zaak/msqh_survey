@@ -1,0 +1,38 @@
+<%= form_for @changeset, @action, [multipart: true, class: "ui large form"], fn f -> %>
+  <%= if @changeset.action do %>
+    <div class="ui error message alert alert-danger">
+      <p>Oops, something went wrong! Please check the errors below.</p>
+    </div>
+  <% end %>
+  <div class="ui emphasis segment">
+    <h4 class="ui header">MSQH ACTION</h4>
+    <div class="fields">
+      <div class="six wide field">
+        <div class="field">
+          <%= label f, :receipt_id, "MSQH Receipt ID" %>
+          <%= text_input f, :receipt_id, class: "form-control" %>
+          <%= error_tag f, :receipt_id %>
+        </div>
+      </div>
+      <div class="ten wide field">
+        <div class="field">
+          <%= label f, :approved_when %>
+          <%= text_input f, :approved_when, class: "form-control" %>
+          <%= error_tag f, :approved_when %>
+        </div>
+      </div>
+    </div>
+
+    <div class="field">
+      <%= label f, :receipt_path, "MSQH Receipt", class: "control-label" %>
+      <%= file_input f, :receipt_path, class: "form-control" %>
+      <%= error_tag f, :receipt_path %>
+    </div>
+
+    <%= hidden_input f, :membership_id, [class: "form-control", value: @membership.membership.id] %>
+
+    <div class="field">
+      <%= submit html_escape({:safe, "<i class='gray checkmark icon'></i>Verify Payment"}), class: "ui big teal right labeled icon button" %>
+    </div>
+  </div>
+<% end %>

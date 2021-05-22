@@ -1,0 +1,13 @@
+<h2>Show membership</h2>
+
+<ul>
+
+  <li>
+    <strong>Membership Category:</strong>
+    <%= @membership_category.membership_category_name %>
+  </li>
+
+</ul>
+
+<%= link "Edit", to: membership_category_path(@conn, :edit, @membership) %><br/>
+<%= link "Back", to: membership_category_path(@conn, :index) %>

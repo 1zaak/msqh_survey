@@ -1,0 +1,34 @@
+<h2>Listing vouchers</h2>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>Code</th>
+      <th>Discount percent</th>
+      <th>Expire at</th>
+      <th>Valid</th>
+      <th>Event</th>
+
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+<%= for voucher <- @vouchers do %>
+    <tr>
+      <td><%= voucher.code %></td>
+      <td><%= voucher.discount_percent %></td>
+      <td><%= voucher.expire_at %></td>
+      <td><%= voucher.valid %></td>
+      <td><%= voucher.event_id %></td>
+
+      <td class="text-right">
+        <%= link "Show", to: voucher_path(@conn, :show, voucher), class: "btn btn-default btn-xs" %>
+        <%= link "Edit", to: voucher_path(@conn, :edit, voucher), class: "btn btn-default btn-xs" %>
+        <%= link "Delete", to: voucher_path(@conn, :delete, voucher), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-danger btn-xs" %>
+      </td>
+    </tr>
+<% end %>
+  </tbody>
+</table>
+
+<%= link "New voucher", to: voucher_path(@conn, :new) %>

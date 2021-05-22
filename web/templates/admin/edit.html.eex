@@ -1,0 +1,33 @@
+<div class="ui breadcrumb">
+  <%= link "Dashboard", to: admin_path(@conn, :index) %>
+  <div class="divider"> / </div>
+  <%= link "User & Membership", to: admin_path(@conn, :show, @user) %>
+  <div class="divider"> / </div>
+  <div class="active section">Edit <%= @user.username %></div>
+</div>
+<div class="pageHeader">
+  <div class="segment">
+    <h3 class="ui dividing header">
+      <i class="large user icon"></i>
+      <div class="content">Edit profile (<%= @user.username %>)
+      </div>
+    </h3>
+  </div>
+</div>
+<div class="ui grid">
+  <div class="sixteen wide column">
+    <div class="ui info message alert alert-info"><%= get_flash(@conn, :info) %></div>
+    <div class="ui warning message alert alert-warning"><%= get_flash(@conn, :warning) %></div>
+    <div class="ui error message alert alert-danger"><%= get_flash(@conn, :error) %></div>
+    <div class="ui padded segment">
+      <%= render "form.html", changeset: @changeset,
+                              action: admin_path(@conn, :update, @user),
+                              facilities: @facilities,
+                              cv_path: @cv_path, member_cert_path: @member_cert_path,
+                              conn: @conn,
+                              user: @user %>
+                              <br/>
+      <%= link "Back", to: admin_path(@conn, :show, @user) %>
+    </div>
+  </div>
+</div>

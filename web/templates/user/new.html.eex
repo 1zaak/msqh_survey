@@ -1,0 +1,7 @@
+<h2>Member Registration</h2>
+
+<%= render "form.html", changeset: @changeset,
+                        action: user_path(@conn, :create),
+                        facilities: @facilities %>
+
+<%= link "Back", to: login_path(@conn, :index) %>

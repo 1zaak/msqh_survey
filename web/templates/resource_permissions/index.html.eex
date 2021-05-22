@@ -1,0 +1,30 @@
+<h2>Listing resource permissions</h2>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>Resource</th>
+      <th>Allowed user</th>
+      <th>Disallowed user</th>
+
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+<%= for resource_permissions <- @resource_permissions do %>
+    <tr>
+      <td><%= resource_permissions.resource_id %></td>
+      <td><%= resource_permissions.allowed_user_id %></td>
+      <td><%= resource_permissions.disallowed_user_id %></td>
+
+      <td class="text-right">
+        <%= link "Show", to: resource_permissions_path(@conn, :show, resource_permissions), class: "btn btn-default btn-xs" %>
+        <%= link "Edit", to: resource_permissions_path(@conn, :edit, resource_permissions), class: "btn btn-default btn-xs" %>
+        <%= link "Delete", to: resource_permissions_path(@conn, :delete, resource_permissions), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-danger btn-xs" %>
+      </td>
+    </tr>
+<% end %>
+  </tbody>
+</table>
+
+<%= link "New resource permissions", to: resource_permissions_path(@conn, :new) %>

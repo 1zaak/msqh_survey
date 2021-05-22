@@ -1,0 +1,8 @@
+<h2>New default price</h2>
+
+<%= render "form.html", changeset: @changeset,
+                        action: default_price_path(@conn, :create),
+                        membership_types: @membership_types,
+                        membership_categories: @membership_categories %>
+
+<%= link "Back", to: default_price_path(@conn, :index) %>

@@ -1,0 +1,85 @@
+<h3 class="ui dividing header">
+<i class="large percent icon"></i>
+<div class="content">Rebates</div>
+</h3>
+<div class="ui breadcrumb">
+  <%= link "Dashboard", to: admin_path(@conn, :index) %>
+  <div class="divider"> / </div>
+  <%= link "Events", to: admin_event_path(@conn, :index) %>
+  <div class="divider"> / </div>
+  <div class="active section">Rebates</div>
+</div>
+<h4 class="ui dividing header"><i class="calendar icon"></i><%= @event.title %></h4>
+<div class="ui grid">
+  <div class="eight wide column">
+    <%= if Enum.count(@vouchers) > 0 do %>
+      <table class="ui compact table">
+        <thead>
+          <tr>
+            <th>Voucher code</th>
+            <th>Discount (%)</th>
+            <th>Expiration Date</th>
+          </tr>
+        </thead>
+        <tbody>
+      <%= for voucher <- @vouchers do %>
+          <tr>
+            <td><%= voucher.code %></td>
+            <td><%= voucher.discount_percent %></td>
+            <td><%= Timex.Timezone.convert(voucher.expire_at, "Asia/Kuala_Lumpur") |>
+            Timex.format!("%A, %b %d, %Y %l:%M%P", :strftime) %></td>
+          </tr>
+      <% end %>
+        </tbody>
+      </table>
+    <% else %>
+      <p>No vouchers created</p>
+    <% end %>
+  </div>
+  <div class="eight wide column">
+    <div class="ui padded segment">
+    <h4 class="ui dividing header">Event Information</h4>
+    <ul>
+      <li>
+        <strong>Event Name:</strong>
+        <%= @event.title %>
+      </li>
+
+      <li>
+        <strong>Start:</strong>
+        <%= Timex.Timezone.convert(@event.active_from, "Asia/Kuala_Lumpur") |>
+        Timex.format!("%A, %b %d, %Y %l:%M%P", :strftime) %>
+      </li>
+
+      <li>
+        <strong>End:</strong>
+        <%= Timex.Timezone.convert(@event.active_to, "Asia/Kuala_Lumpur") |>
+        Timex.format!("%A, %b %d, %Y %l:%M%P", :strftime) %>
+      </li>
+
+      <li>
+        <strong>Description:</strong>
+        <%= @event.description %>
+      </li>
+
+      <li>
+        <strong>Location:</strong>
+        <%= @event.location %>
+      </li>
+
+      <li>
+        <strong>Admission Price:</strong>
+        <%= @event.admission_price %>
+      </li>
+
+    </ul>
+    <h4 class="ui dividing header">Add voucher for <%= @event.title %></h4>
+      <%= render "voucher.html", changeset: @changeset,
+                              action: admin_event_path(@conn, :voucher_create),
+                              event: @event,
+                              users: @users %>
+
+
+    </div>
+  </div>
+</div>

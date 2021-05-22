@@ -1,0 +1,88 @@
+<div class="ui breadcrumb">
+  <%= link "Dashboard", to: admin_path(@conn, :index) %>
+  <div class="divider"> / </div>
+  <%= link "Enquiries", to: admin_enquiry_path(@conn, :index) %>
+  <div class="divider"> / </div>
+  <div class="active section">Enquiry</div>
+</div>
+<div class="pageHeader">
+  <div class="segment">
+    <h3 class="ui dividing header">
+      <i class="large talk icon"></i>
+      <div class="content">Enquiry
+      </div>
+    </h3>
+    <div class="ui grid">
+      <div class="ten wide column">
+        <div class="ui segment">
+          <div class="ui comments">
+            <div class="comment">
+              <a class="avatar">
+                <img src="/images/avatar.png">
+              </a>
+              <div class="content">
+                <%= unless is_nil(@user_enquiry.member) do %>
+                <a class="author"><%= @user_enquiry.member.username %></a>
+                <%= end %>
+                <div class="metadata">
+                  <span class="date"><%= Timex.Timezone.convert(@user_enquiry.updated_at, "Asia/Kuala_Lumpur") |>
+                  Timex.format!("%b %d, %Y at %l:%M%p", :strftime) %></span>
+                </div>
+                <div class="text">
+                  <p><%= @user_enquiry.message %> <%= unless is_nil(@user_enquiry.enquiry_attachment_path) do %>
+                  <%= link html_escape({:safe, "<span class='ui tiny pink label'><i class='attach icon'></i>Attachment</span>"}), to: "/" <> MsqhPortal.EnquiryAttachment.url({@user_enquiry.enquiry_attachment_path, @user_enquiry}, :original)
+                  |> String.split_at(13)
+                  |> Tuple.delete_at(0)
+                  |> Tuple.to_list
+                  |> Enum.join, target: "_blank"  %>
+                  <%= end %></p>
+                </div>
+              </div>
+              <div class="comments">
+                <%= for enquiry_response <- @user_enquiry.enquiry_responses do %>
+                <div class="comment">
+                  <a class="avatar">
+                    <%= unless is_nil(enquiry_response.admin) do %>
+                    <img src="/images/avatar-admin.png">
+                    <%= else %>
+                    <img src="/images/avatar.png">
+                    <%= end %>
+                  </a>
+                  <div class="content">
+                    <%= unless is_nil(enquiry_response.admin) do %>
+                    <a class="author"><%= enquiry_response.admin.username %></a>
+                    <%= else %>
+                    <a class="author"><%= enquiry_response.member.username %></a>
+                    <%= end %>
+                    <div class="metadata">
+                      <span class="date"><%= Timex.Timezone.convert(enquiry_response.updated_at, "Asia/Kuala_Lumpur") |>
+                      Timex.format!("%b %d, %Y at %l:%M%p", :strftime) %></span>
+                    </div>
+                    <div class="text">
+                      <%= enquiry_response.message %> <%= unless is_nil(enquiry_response.enquiry_response_attachment_path) do %>
+                      <%= link html_escape({:safe, "<span class='ui tiny pink label'><i class='attach icon'></i>Attachment</span>"}), to: "/" <> MsqhPortal.EnquiryResponseAttachment.url({enquiry_response.enquiry_response_attachment_path, enquiry_response}, :original)
+                      |> String.split_at(13)
+                      |> Tuple.delete_at(0)
+                      |> Tuple.to_list
+                      |> Enum.join, target: "_blank"  %>
+                      <%= end %>
+                    </div>
+                  </div>
+                </div>
+                <%= end %>
+              </div>
+            </div>
+          </div>
+      </div>
+      </div>
+      <div class="six wide column">
+        <div class="ui segment">
+          <h4 class="ui dividing header"><i class="outline comment icon"></i>Reply</h4>
+          <%= render "send_reply.html", changeset: @changeset,
+                                  action: admin_enquiry_path(@conn, :send_reply),
+                                  user_enquiry: @user_enquiry %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

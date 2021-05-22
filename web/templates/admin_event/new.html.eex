@@ -1,0 +1,18 @@
+<h3 class="ui dividing header">
+<i class="large hospital icon"></i>
+<div class="content">Add Event
+</div>
+</h3>
+<div class="ui breadcrumb">
+  <%= link "Dashboard", to: admin_path(@conn, :index) %>
+  <div class="divider"> / </div>
+  <%= link "Events", to: admin_event_path(@conn, :index) %>
+  <div class="divider"> / </div>
+  <div class="active section">Add Event</div>
+</div>
+
+<div class="ui very padded segment">
+<%= render "form.html", changeset: @changeset,
+                        action: admin_event_path(@conn, :create) %>
+</div>
+<%= link "Back", to: admin_event_path(@conn, :index) %>

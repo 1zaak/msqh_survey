@@ -1,0 +1,26 @@
+<h3 class="ui dividing header">
+  <i class="large hospital icon"></i>
+  <div class="content">Edit membership package for <%= @package.facility.facility_name %>
+  </div>
+</h3>
+<div class="ui breadcrumb">
+  <%= link "Dashboard", to: admin_path(@conn, :index) %>
+  <div class="divider"> / </div>
+  <%= link "Facilities", to: admin_facility_path(@conn, :index) %>
+  <div class="divider"> / </div>
+  <%= link @package.facility.facility_name, to: admin_facility_path(@conn, :show, @package.facility.id) %>
+  <div class="divider"> / </div>
+  <div class="active section">
+    <%= @package.membership_category.membership_category_name %>
+    <%= unless is_nil(@package.membership_type) do %>
+    &nbsp;(<%= @package.membership_type.membership_type_name %>)
+    <%= end %>
+</div>
+
+</div>
+
+<div class="ui padded segment">
+<%= render "package_form.html", changeset: @changeset,
+                        action: admin_facility_path(@conn, :update_package, @package) %><br/>
+</div>
+<%= link "Back", to: admin_facility_path(@conn, :show, @package.facility_id) %>

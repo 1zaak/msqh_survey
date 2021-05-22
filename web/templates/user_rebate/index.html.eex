@@ -1,0 +1,62 @@
+<div class="ui grid">
+  <!--the vertical side menu-->
+  <div class="four wide column">
+      <div class="verticalMenu">
+          <div class="ui vertical pointing menu fluid">
+              <%= link html_escape({:safe, "<i class='home icon'></i>Home"}), to: user_path(@conn, :index), class: "item" %>
+              <%= link html_escape({:safe, "<i class='user icon'></i>Profile"}), to: profile_path(@conn, :index), class: "item" %>
+              <%= link html_escape({:safe, "<i class='payment icon'></i>Payment History"}), to: user_payment_path(@conn, :index), class: "item" %>
+              <%= link html_escape({:safe, "<i class='users icon'></i>Renew Membership"}), to: user_membership_path(@conn, :index), class: "item" %>
+              <%= link html_escape({:safe, "<i class='calendar icon'></i>Events"}), to: user_event_path(@conn, :index), class: "teal item" %>
+              <%= link html_escape({:safe, "<i class='birthday icon'></i>Vouchers"}), to: user_rebate_path(@conn, :index), class: "active teal item" %>
+              <%= link html_escape({:safe, "<i class='university icon'></i>Resources"}), to: user_resource_path(@conn, :index), class: "item" %>
+              <%= link html_escape({:safe, "<i class='info icon'></i>Help"}), to: user_enquiry_path(@conn, :index), class: "item" %>
+          </div>
+      </div>
+  </div>
+
+  <!--the main content-->
+  <div class="twelve wide column">
+    <div class="pageHeader">
+      <div class="segment">
+        <h3 class="ui dividing header">
+          <i class="large birthday icon"></i>
+          <div class="content">Vouchers
+          </div>
+        </h3>
+      </div>
+      <div class="ui very relaxed list">
+        <%= if Enum.count(@user_vouchers) < 1 do %>
+          No rebates
+        <%= end %>
+        <%= for user_voucher <- @user_vouchers do %>
+        <div class="item">
+          <div class="left floated content">
+            <%= link html_escape({:safe, user_voucher.voucher.code }), to: user_event_path(@conn, :index), class: "ui big pink label" %>
+          </div>
+          <div class="content">
+            <div class="header">
+              <%= user_voucher.voucher.event.title %>&nbsp;
+            </div>
+            <div class="description">
+              <%= Timex.Timezone.convert(user_voucher.voucher.event.active_from, "Asia/Kuala_Lumpur")
+              |> Timex.format!("%A, %b %d, %Y %l:%M%P", :strftime) %>
+              &nbsp;<i class="medium long arrow right icon"></i>&nbsp;&nbsp;
+              <%= Timex.Timezone.convert(user_voucher.voucher.event.active_to, "Asia/Kuala_Lumpur")
+              |> Timex.format!("%A, %b %d, %Y %l:%M%P", :strftime) %>
+            </div>
+          </div>
+          <div class="right floated content">
+            <div class="ui large black label"><i class="arrow circle down icon"></i><%= user_voucher.voucher.discount_percent %>%</div>
+          </div>
+          <div class="right floated content">
+            <div class="ui large green label"><%= Money.subtract(user_voucher.voucher.event.admission_price, Money.multiply(user_voucher.voucher.event.admission_price, (user_voucher.voucher.discount_percent / 100))) %></div>
+
+          </div>
+        </div>
+        <%= end %>
+      </div>
+      <%= pagination_links @user_vouchers, view_style: :semantic%>
+    </div>
+  </div>
+</div>

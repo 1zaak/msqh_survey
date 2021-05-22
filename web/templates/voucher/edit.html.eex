@@ -1,0 +1,6 @@
+<h2>Edit voucher</h2>
+
+<%= render "form.html", changeset: @changeset,
+                        action: voucher_path(@conn, :update, @voucher) %>
+
+<%= link "Back", to: voucher_path(@conn, :index) %>

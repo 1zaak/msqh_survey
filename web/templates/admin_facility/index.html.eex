@@ -1,0 +1,60 @@
+<h3 class="ui dividing header">
+  <i class="large hospital icon"></i>
+  <div class="content">Facilities
+  </div>
+</h3>
+<div class="ui breadcrumb">
+  <%= link "Dashboard", to: admin_path(@conn, :index) %>
+  <div class="divider"> / </div>
+  <div class="active section">Facilities</div>
+</div>
+<%= unless Enum.count(@facilities) < 1 do %>
+<table class="ui single line table">
+  <thead>
+    <tr>
+      <th colspan="4">Facility</th>
+      <th>Sector</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th class="center aligned">Membership Prices</th>
+      <th class="center aligned">Action</th>
+    </tr>
+  </thead>
+  <tbody>
+<%= for facility <- @facilities do %>
+
+    <tr>
+      <td colspan="4"><%= facility.facility_name %></td>
+      <td>
+      <%= unless is_nil(facility.sector) do %>
+        <%= facility.sector %>
+      <%= else %>
+        -
+      <%= end %>
+      </td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td class="center aligned">
+        <%= link html_escape({:safe, "<i class='large money icon'></i>"}), to: admin_facility_path(@conn, :show, facility), class: "btn btn-default btn-xs" %>
+      </td>
+      <td class="center aligned">
+        <%= link html_escape({:safe, "<i class='large edit icon'></i>"}), to: admin_facility_path(@conn, :edit, facility)%>
+        <%= link html_escape({:safe, "<i class='large remove icon'></i>"}), to: admin_facility_path(@conn, :delete, facility), method: :delete, data: [confirm: "Are you sure you want to delete " <> facility.facility_name <> "?"] %>
+      </td>
+
+    </tr>
+
+<% end %>
+  </tbody>
+</table>
+<% else %>
+<div class="ui relaxed divided list">
+No facilities created
+</div>
+<% end %>
+
+<%= pagination_links @facilities, view_style: :semantic%>
+
+<%= link html_escape({:safe, "<i class='large plus icon'></i>Add Facility"}), to: admin_facility_path(@conn, :new), class: "ui large teal label" %>

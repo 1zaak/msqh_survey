@@ -1,0 +1,23 @@
+<h2>Show resource</h2>
+
+<ul>
+
+  <li>
+    <strong>Title:</strong>
+    <%= @resource.title %>
+  </li>
+
+  <li>
+    <strong>Description:</strong>
+    <%= @resource.description %>
+  </li>
+
+  <li>
+    <strong>Resource path:</strong>
+    <%= @resource.admin_resource_path %>
+  </li>
+
+</ul>
+
+<%= link "Edit", to: admin_resource_path(@conn, :edit, @resource) %>
+<%= link "Back", to: admin_resource_path(@conn, :index) %>

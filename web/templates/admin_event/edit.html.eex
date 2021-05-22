@@ -1,0 +1,18 @@
+<h3 class="ui dividing header">
+  <i class="large calendar icon"></i>
+  <div class="content">Events
+  </div>
+</h3>
+<div class="ui breadcrumb">
+  <%= link "Dashboard", to: admin_path(@conn, :index) %>
+  <div class="divider"> / </div>
+  <%= link "Events", to: admin_event_path(@conn, :index) %>
+  <div class="divider"> / </div>
+  <div class="active section">Edit <%= @event.title %></div>
+</div>
+
+<div class="ui padded segment">
+<%= render "form.html", changeset: @changeset,
+                        action: admin_event_path(@conn, :update, @event) %>
+</div>
+<%= link "Back", to: admin_event_path(@conn, :index) %>

@@ -1,0 +1,6 @@
+<h2>Edit notification</h2>
+
+<%= render "form.html", changeset: @changeset,
+                        action: admin_membership_setting_path(@conn, :update, @membership_setting) %>
+
+<%= link "Back", to: admin_membership_setting_path(@conn, :index) %>

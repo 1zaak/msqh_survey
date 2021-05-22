@@ -2,26 +2,33 @@ exports.config = {
   // See http://brunch.io/#documentation for docs.
   files: {
     javascripts: {
-      joinTo: "js/app.js"
-
+      joinTo: {
+              "js/app.js": /^(web\/static\/js)|(node_modules)/,
+              "js/vendor.js": /^web\/static\/vendor/
+            },
       // To use a separate vendor.js bundle, specify two files path
-      // https://github.com/brunch/brunch/blob/stable/docs/config.md#files
+      // http://brunch.io/docs/config#-files-
       // joinTo: {
       //  "js/app.js": /^(web\/static\/js)/,
       //  "js/vendor.js": /^(web\/static\/vendor)|(deps)/
       // }
       //
       // To change the order of concatenation of files, explicitly mention here
-      // https://github.com/brunch/brunch/tree/master/docs#concatenation
-      // order: {
-      //   before: [
-      //     "web/static/vendor/js/jquery-2.1.1.js",
-      //     "web/static/vendor/js/bootstrap.min.js"
-      //   ]
-      // }
+      order: {
+        before: [
+          "web/static/vendor/js/jquery.min.js",
+          "web/static/vendor/js/semantic.min.js"
+        ]
+      }
     },
     stylesheets: {
-      joinTo: "css/app.css"
+      joinTo: {
+             "css/app.css": /^(web\/static\/css)/,
+             "css/vendor.css": /^(web\/static\/vendor)|(deps)/
+           },
+           order: {
+             after: ["web/static/css/app.css"] // concat app.css last
+           }
     },
     templates: {
       joinTo: "js/app.js"
@@ -62,9 +69,48 @@ exports.config = {
   },
 
   npm: {
-    enabled: true,
-    // Whitelist the npm deps to be pulled in as front-end assets.
-    // All other deps in package.json will be excluded from the bundle.
-    whitelist: ["phoenix", "phoenix_html"]
+    enabled: true
   }
 };
+
+// To add the ExAdmin generated assets to your brunch build, do the following:
+//
+// Replace
+//
+//     javascripts: {
+//       joinTo: "js/app.js"
+//     }
+//
+// With
+//
+//     javascripts: {
+//       joinTo: {
+//         "js/app.js": /^(web\/static\/js)|(node_modules)/,
+//         "js/ex_admin_common.js": ["web/static/vendor/ex_admin_common.js"],
+//         "js/admin_lte2.js": ["web/static/vendor/admin_lte2.js"],
+//         "js/jquery.min.js": ["web/static/vendor/jquery.min.js"],
+//       }
+//     },
+//
+// Replace
+//
+//     stylesheets: {
+//       joinTo: "css/app.css",
+//       order: {
+//         after: ["web/static/css/app.css"] // concat app.css last
+//       }
+//     },
+//
+// With
+//
+//     stylesheets: {
+//       joinTo: {
+//         "css/app.css": /^(web\/static\/css)/,
+//         "css/admin_lte2.css": ["web/static/vendor/admin_lte2.css"],
+//         "css/active_admin.css": ["web/static/vendor/active_admin.css.css"],
+//       },
+//       order: {
+//         after: ["web/static/css/app.css"] // concat app.css last
+//       }
+//     },
+//

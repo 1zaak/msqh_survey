@@ -1,0 +1,31 @@
+<h2>Listing Default Prices</h2>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>Membership Category</th>
+      <th>Membership Type</th>
+      <th>Annual Price</th>
+
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+<%= for default_price <- @default_prices do %>
+    <tr>
+      <td><%= default_price.membership_category.membership_category_name %></td>
+      <td><%= default_price.membership_type.membership_type_name %></td>
+      <td><%= default_price.annual_price %></td>
+
+      <td class="text-right">
+        <%= link "Show", to: default_price_path(@conn, :show, default_price), class: "btn btn-default btn-xs" %>
+        <%= link "Edit", to: default_price_path(@conn, :edit, default_price), class: "btn btn-default btn-xs" %>
+        <%= link "Delete", to: default_price_path(@conn, :delete, default_price), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-danger btn-xs" %>
+      </td>
+    </tr>
+<% end %>
+  </tbody>
+</table>
+
+<%= link "New default price", to: default_price_path(@conn, :new) %><br/>
+<%= link "Back", to: admin_path(@conn, :index) %>

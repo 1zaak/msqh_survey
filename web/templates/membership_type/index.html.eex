@@ -1,0 +1,25 @@
+<h2>Listing membership types</h2>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>Membership Type</th>
+
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+<%= for membership_type <- @membership_types do %>
+    <tr>
+      <td><%= membership_type.membership_type_name %></td>
+      <td class="text-right">
+        <%= link "Show", to: membership_type_path(@conn, :show, membership_type), class: "btn btn-default btn-xs" %>
+        <%= link "Edit", to: membership_type_path(@conn, :edit, membership_type), class: "btn btn-default btn-xs" %>
+        <%= link "Delete", to: membership_type_path(@conn, :delete, membership_type), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-danger btn-xs" %>
+      </td>
+    </tr>
+<% end %>
+  </tbody>
+</table>
+
+<%= link "New membership type", to: membership_type_path(@conn, :new) %>

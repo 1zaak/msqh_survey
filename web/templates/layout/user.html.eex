@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Member | MSQH Portal</title>
+    <link rel="stylesheet" href="<%= static_path(@conn, "/css/vendor.css") %>">
+    <link rel="stylesheet" href="<%= static_path(@conn, "/css/app.css") %>">
+  </head>
+
+  <body>
+      <div class="page">
+        <header>
+            <div class="bigcontainer">
+                <div id="logo">
+                    <%= link "MSQH", to: user_path(@conn, :index) %>
+                </div>
+                <div class="user">
+                    <%= unless @member_unread < 1 do %>
+                    <div class="ui compact text menu">
+                      <%= link html_escape({:safe, "<i class='mail large icon'></i>
+                            <span class='circular floating ui small red label'>#{@member_unread}</span>"}), to: user_enquiry_path(@conn, :index), class: "item" %>
+                    </div>
+                    <%= else %>
+                    <div class="ui compact text menu">
+                      <%= link html_escape({:safe, "<i class='mail large icon'></i>"}), to: user_enquiry_path(@conn, :index), class: "item" %>
+                    </div>
+                    <%= end %>
+                    <div class="ui inline labeled top right pointing dropdown">
+                        <img class="ui avatar image" src="/images/avatar.png"> Welcome, <%= @current_user.username %>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+      <!-- the main menu-->
+      <div class="ui teal inverted menu">
+          <div class="bigcontainer">
+              <div class="right menu">
+                  <%= if @conn.request_path == "/dashboard" do %>
+                    <%= link html_escape({:safe, "<i class='home icon'></i>Home"}), to: user_path(@conn, :index), class: "active item" %>
+                    <%= link html_escape({:safe, "<i class='user icon'></i>Profile"}), to: profile_path(@conn, :index), class: "item" %>
+                    <%= link html_escape({:safe, "<i class='payment icon'></i>Payment History"}), to: user_payment_path(@conn, :index), class: "item" %>
+                    <%= link html_escape({:safe, "<i class='users icon'></i>Renew Membership"}), to: user_membership_path(@conn, :index), class: "item" %>
+                    <%= link html_escape({:safe, "<i class='calendar icon'></i>Events"}), to: user_event_path(@conn, :index), class: "item" %>
+                    <%= link html_escape({:safe, "<i class='birthday icon'></i>Vouchers"}), to: user_rebate_path(@conn, :index), class: "item" %>
+                    <%= link html_escape({:safe, "<i class='university icon'></i>Resources"}), to: user_resource_path(@conn, :index), class: "item" %>
+                    <%= link html_escape({:safe, "<i class='talk icon'></i>Enquiries"}), to: user_enquiry_path(@conn, :index), class: "item" %>
+                  <%= end %>
+                  <%= if @conn.request_path == "/dashboard/" do %>
+                    <%= link html_escape({:safe, "<i class='home icon'></i>Home"}), to: user_path(@conn, :index), class: "active item" %>
+                    <%= link html_escape({:safe, "<i class='user icon'></i>Profile"}), to: profile_path(@conn, :index), class: "item" %>
+                    <%= link html_escape({:safe, "<i class='payment icon'></i>Payment History"}), to: user_payment_path(@conn, :index), class: "item" %>
+                    <%= link html_escape({:safe, "<i class='users icon'></i>Renew Membership"}), to: user_membership_path(@conn, :index), class: "item" %>
+                    <%= link html_escape({:safe, "<i class='calendar icon'></i>Events"}), to: user_event_path(@conn, :index), class: "item" %>
+                    <%= link html_escape({:safe, "<i class='birthday icon'></i>Vouchers"}), to: user_rebate_path(@conn, :index), class: "item" %>
+                    <%= link html_escape({:safe, "<i class='university icon'></i>Resources"}), to: user_resource_path(@conn, :index), class: "item" %>
+                    <%= link html_escape({:safe, "<i class='talk icon'></i>Enquiries"}), to: user_enquiry_path(@conn, :index), class: "item" %>
+                  <%= end %>
+                  <%= if @conn.request_path == "/profile" do %>
+                    <%= link html_escape({:safe, "<i class='home icon'></i>Home"}), to: user_path(@conn, :index), class: "item" %>
+                    <%= link html_escape({:safe, "<i class='user icon'></i>Profile"}), to: profile_path(@conn, :index), class: "active item" %>
+                    <%= link html_escape({:safe, "<i class='payment icon'></i>Payment History"}), to: user_payment_path(@conn, :index), class: "item" %>
+                    <%= link html_escape({:safe, "<i class='users icon'></i>Renew Membership"}), to: user_membership_path(@conn, :index), class: "item" %>
+                    <%= link html_escape({:safe, "<i class='calendar icon'></i>Events"}), to: user_event_path(@conn, :index), class: "item" %>
+                    <%= link html_escape({:safe, "<i class='birthday icon'></i>Vouchers"}), to: user_rebate_path(@conn, :index), class: "item" %>
+                    <%= link html_escape({:safe, "<i class='university icon'></i>Resources"}), to: user_resource_path(@conn, :index), class: "item" %>
+                    <%= link html_escape({:safe, "<i class='talk icon'></i>Enquiries"}), to: user_enquiry_path(@conn, :index), class: "item" %>
+                  <%= end %>
+                  <%= if @conn.request_path == "/profile/" do %>
+                    <%= link html_escape({:safe, "<i class='home icon'></i>Home"}), to: user_path(@conn, :index), class: "item" %>
+                    <%= link html_escape({:safe, "<i class='user icon'></i>Profile"}), to: profile_path(@conn, :index), class: "active item" %>
+                    <%= link html_escape({:safe, "<i class='payment icon'></i>Payment History"}), to: user_payment_path(@conn, :index), class: "item" %>
+                    <%= link html_escape({:safe, "<i class='users icon'></i>Renew Membership"}), to: user_membership_path(@conn, :index), class: "item" %>
+                    <%= link html_escape({:safe, "<i class='calendar icon'></i>Events"}), to: user_event_path(@conn, :index), class: "item" %>
+                    <%= link html_escape({:safe, "<i class='birthday icon'></i>Vouchers"}), to: user_rebate_path(@conn, :index), class: "item" %>
+                    <%= link html_escape({:safe, "<i class='university icon'></i>Resources"}), to: user_resource_path(@conn, :index), class: "item" %>
+                    <%= link html_escape({:safe, "<i class='talk icon'></i>Enquiries"}), to: user_enquiry_path(@conn, :index), class: "item" %>
+                  <%= end %>
+                  <%= if @conn.request_path == "/profile/edit" do %>
+                    <%= link html_escape({:safe, "<i class='home icon'></i>Home"}), to: user_path(@conn, :index), class: "item" %>
+                    <%= link html_escape({:safe, "<i class='user icon'></i>Profile"}), to: profile_path(@conn, :index), class: "active item" %>
+                    <%= link html_escape({:safe, "<i class='payment icon'></i>Payment History"}), to: user_payment_path(@conn, :index), class: "item" %>
+                    <%= link html_escape({:safe, "<i class='users icon'></i>Renew Membership"}), to: user_membership_path(@conn, :index), class: "item" %>
+                    <%= link html_escape({:safe, "<i class='calendar icon'></i>Events"}), to: user_event_path(@conn, :index), class: "item" %>
+                    <%= link html_escape({:safe, "<i class='birthday icon'></i>Vouchers"}), to: user_rebate_path(@conn, :index), class: "item" %>
+                    <%= link html_escape({:safe, "<i class='university icon'></i>Resources"}), to: user_resource_path(@conn, :index), class: "item" %>
+                    <%= link html_escape({:safe, "<i class='talk icon'></i>Enquiries"}), to: user_enquiry_path(@conn, :index), class: "item" %>
+                  <%= end %>
+                  <%= if @conn.request_path == "/profile/edit/" do %>
+                    <%= link html_escape({:safe, "<i class='home icon'></i>Home"}), to: user_path(@conn, :index), class: "item" %>
+                    <%= link html_escape({:safe, "<i class='user icon'></i>Profile"}), to: profile_path(@conn, :index), class: "active item" %>
+                    <%= link html_escape({:safe, "<i class='payment icon'></i>Payment History"}), to: user_payment_path(@conn, :index), class: "item" %>
+                    <%= link html_escape({:safe, "<i class='users icon'></i>Renew Membership"}), to: user_membership_path(@conn, :index), class: "item" %>
+                    <%= link html_escape({:safe, "<i class='calendar icon'></i>Events"}), to: user_event_path(@conn, :index), class: "item" %>
+                    <%= link html_escape({:safe, "<i class='birthday icon'></i>Vouchers"}), to: user_rebate_path(@conn, :index), class: "item" %>
+                    <%= link html_escape({:safe, "<i class='university icon'></i>Resources"}), to: user_resource_path(@conn, :index), class: "item" %>
+                    <%= link html_escape({:safe, "<i class='talk icon'></i>Enquiries"}), to: user_enquiry_path(@conn, :index), class: "item" %>
+                  <%= end %>
+                  <%= if @conn.request_path == "/payment" do %>
+                    <%= link html_escape({:safe, "<i class='home icon'></i>Home"}), to: user_path(@conn, :index), class: "item" %>
+                    <%= link html_escape({:safe, "<i class='user icon'></i>Profile"}), to: profile_path(@conn, :index), class: "item" %>
+                    <%= link html_escape({:safe, "<i class='payment icon'></i>Payment History"}), to: user_payment_path(@conn, :index), class: "active item" %>
+                    <%= link html_escape({:safe, "<i class='users icon'></i>Renew Membership"}), to: user_membership_path(@conn, :index), class: "item" %>
+                    <%= link html_escape({:safe, "<i class='calendar icon'></i>Events"}), to: user_event_path(@conn, :index), class: "item" %>
+                    <%= link html_escape({:safe, "<i class='birthday icon'></i>Vouchers"}), to: user_rebate_path(@conn, :index), class: "item" %>
+                    <%= link html_escape({:safe, "<i class='university icon'></i>Resources"}), to: user_resource_path(@conn, :index), class: "item" %>
+                    <%= link html_escape({:safe, "<i class='talk icon'></i>Enquiries"}), to: user_enquiry_path(@conn, :index), class: "item" %>
+                  <%= end %>
+                  <%= if @conn.request_path == "/payment/" do %>
+                    <%= link html_escape({:safe, "<i class='home icon'></i>Home"}), to: user_path(@conn, :index), class: "item" %>
+                    <%= link html_escape({:safe, "<i class='user icon'></i>Profile"}), to: profile_path(@conn, :index), class: "item" %>
+                    <%= link html_escape({:safe, "<i class='payment icon'></i>Payment History"}), to: user_payment_path(@conn, :index), class: "active item" %>
+                    <%= link html_escape({:safe, "<i class='users icon'></i>Renew Membership"}), to: user_membership_path(@conn, :index), class: "item" %>
+                    <%= link html_escape({:safe, "<i class='calendar icon'></i>Events"}), to: user_event_path(@conn, :index), class: "item" %>
+                    <%= link html_escape({:safe, "<i class='birthday icon'></i>Vouchers"}), to: user_rebate_path(@conn, :index), class: "item" %>
+                    <%= link html_escape({:safe, "<i class='university icon'></i>Resources"}), to: user_resource_path(@conn, :index), class: "item" %>
+                    <%= link html_escape({:safe, "<i class='talk icon'></i>Enquiries"}), to: user_enquiry_path(@conn, :index), class: "item" %>
+                  <%= end %>
+                  <%= if @conn.request_path == "/membership/new" do %>
+                    <%= link html_escape({:safe, "<i class='home icon'></i>Home"}), to: user_path(@conn, :index), class: "item" %>
+                    <%= link html_escape({:safe, "<i class='user icon'></i>Profile"}), to: profile_path(@conn, :index), class: "item" %>
+                    <%= link html_escape({:safe, "<i class='payment icon'></i>Payment History"}), to: user_payment_path(@conn, :index), class: "item" %>
+                    <%= link html_escape({:safe, "<i class='users icon'></i>Renew Membership"}), to: user_membership_path(@conn, :index), class: "active item" %>
+                    <%= link html_escape({:safe, "<i class='calendar icon'></i>Events"}), to: user_event_path(@conn, :index), class: "item" %>
+                    <%= link html_escape({:safe, "<i class='birthday icon'></i>Vouchers"}), to: user_rebate_path(@conn, :index), class: "item" %>
+                    <%= link html_escape({:safe, "<i class='university icon'></i>Resources"}), to: user_resource_path(@conn, :index), class: "item" %>
+                    <%= link html_escape({:safe, "<i class='talk icon'></i>Enquiries"}), to: user_enquiry_path(@conn, :index), class: "item" %>
+                  <%= end %>
+                  <%= if @conn.request_path == "/membership/new/" do %>
+                    <%= link html_escape({:safe, "<i class='home icon'></i>Home"}), to: user_path(@conn, :index), class: "item" %>
+                    <%= link html_escape({:safe, "<i class='user icon'></i>Profile"}), to: profile_path(@conn, :index), class: "item" %>
+                    <%= link html_escape({:safe, "<i class='payment icon'></i>Payment History"}), to: user_payment_path(@conn, :index), class: "item" %>
+                    <%= link html_escape({:safe, "<i class='users icon'></i>Renew Membership"}), to: user_membership_path(@conn, :index), class: "active item" %>
+                    <%= link html_escape({:safe, "<i class='calendar icon'></i>Events"}), to: user_event_path(@conn, :index), class: "item" %>
+                    <%= link html_escape({:safe, "<i class='birthday icon'></i>Vouchers"}), to: user_rebate_path(@conn, :index), class: "item" %>
+                    <%= link html_escape({:safe, "<i class='university icon'></i>Resources"}), to: user_resource_path(@conn, :index), class: "item" %>
+                    <%= link html_escape({:safe, "<i class='talk icon'></i>Enquiries"}), to: user_enquiry_path(@conn, :index), class: "item" %>
+                  <%= end %>
+                  <%= if @conn.request_path == "/membership/edit" do %>
+                    <%= link html_escape({:safe, "<i class='home icon'></i>Home"}), to: user_path(@conn, :index), class: "item" %>
+                    <%= link html_escape({:safe, "<i class='user icon'></i>Profile"}), to: profile_path(@conn, :index), class: "item" %>
+                    <%= link html_escape({:safe, "<i class='payment icon'></i>Payment History"}), to: user_payment_path(@conn, :index), class: "item" %>
+                    <%= link html_escape({:safe, "<i class='users icon'></i>Renew Membership"}), to: user_membership_path(@conn, :index), class: "active item" %>
+                    <%= link html_escape({:safe, "<i class='calendar icon'></i>Events"}), to: user_event_path(@conn, :index), class: "item" %>
+                    <%= link html_escape({:safe, "<i class='birthday icon'></i>Vouchers"}), to: user_rebate_path(@conn, :index), class: "item" %>
+                    <%= link html_escape({:safe, "<i class='university icon'></i>Resources"}), to: user_resource_path(@conn, :index), class: "item" %>
+                    <%= link html_escape({:safe, "<i class='talk icon'></i>Enquiries"}), to: user_enquiry_path(@conn, :index), class: "item" %>
+                  <%= end %>
+                  <%= if @conn.request_path == "/membership/edit/" do %>
+                    <%= link html_escape({:safe, "<i class='home icon'></i>Home"}), to: user_path(@conn, :index), class: "item" %>
+                    <%= link html_escape({:safe, "<i class='user icon'></i>Profile"}), to: profile_path(@conn, :index), class: "item" %>
+                    <%= link html_escape({:safe, "<i class='payment icon'></i>Payment History"}), to: user_payment_path(@conn, :index), class: "item" %>
+                    <%= link html_escape({:safe, "<i class='users icon'></i>Renew Membership"}), to: user_membership_path(@conn, :index), class: "active item" %>
+                    <%= link html_escape({:safe, "<i class='calendar icon'></i>Events"}), to: user_event_path(@conn, :index), class: "item" %>
+                    <%= link html_escape({:safe, "<i class='birthday icon'></i>Vouchers"}), to: user_rebate_path(@conn, :index), class: "item" %>
+                    <%= link html_escape({:safe, "<i class='university icon'></i>Resources"}), to: user_resource_path(@conn, :index), class: "item" %>
+                    <%= link html_escape({:safe, "<i class='talk icon'></i>Enquiries"}), to: user_enquiry_path(@conn, :index), class: "item" %>
+                  <%= end %>
+                  <%= if @conn.request_path == "/membership/payment/edit" do %>
+                    <%= link html_escape({:safe, "<i class='home icon'></i>Home"}), to: user_path(@conn, :index), class: "item" %>
+                    <%= link html_escape({:safe, "<i class='user icon'></i>Profile"}), to: profile_path(@conn, :index), class: "item" %>
+                    <%= link html_escape({:safe, "<i class='payment icon'></i>Payment History"}), to: user_payment_path(@conn, :index), class: "item" %>
+                    <%= link html_escape({:safe, "<i class='users icon'></i>Renew Membership"}), to: user_membership_path(@conn, :index), class: "active item" %>
+                    <%= link html_escape({:safe, "<i class='calendar icon'></i>Events"}), to: user_event_path(@conn, :index), class: "item" %>
+                    <%= link html_escape({:safe, "<i class='birthday icon'></i>Vouchers"}), to: user_rebate_path(@conn, :index), class: "item" %>
+                    <%= link html_escape({:safe, "<i class='university icon'></i>Resources"}), to: user_resource_path(@conn, :index), class: "item" %>
+                    <%= link html_escape({:safe, "<i class='talk icon'></i>Enquiries"}), to: user_enquiry_path(@conn, :index), class: "item" %>
+                  <%= end %>
+                  <%= if @conn.request_path == "/membership/payment/edit/" do %>
+                    <%= link html_escape({:safe, "<i class='home icon'></i>Home"}), to: user_path(@conn, :index), class: "item" %>
+                    <%= link html_escape({:safe, "<i class='user icon'></i>Profile"}), to: profile_path(@conn, :index), class: "item" %>
+                    <%= link html_escape({:safe, "<i class='payment icon'></i>Payment History"}), to: user_payment_path(@conn, :index), class: "item" %>
+                    <%= link html_escape({:safe, "<i class='users icon'></i>Renew Membership"}), to: user_membership_path(@conn, :index), class: "active item" %>
+                    <%= link html_escape({:safe, "<i class='calendar icon'></i>Events"}), to: user_event_path(@conn, :index), class: "item" %>
+                    <%= link html_escape({:safe, "<i class='birthday icon'></i>Vouchers"}), to: user_rebate_path(@conn, :index), class: "item" %>
+                    <%= link html_escape({:safe, "<i class='university icon'></i>Resources"}), to: user_resource_path(@conn, :index), class: "item" %>
+                    <%= link html_escape({:safe, "<i class='talk icon'></i>Enquiries"}), to: user_enquiry_path(@conn, :index), class: "item" %>
+                  <%= end %>
+                  <%= if Regex.match?(~r/\/membership\/payment\/edit\/\d+$/, @conn.request_path) do %>
+                    <%= link html_escape({:safe, "<i class='home icon'></i>Home"}), to: user_path(@conn, :index), class: "item" %>
+                    <%= link html_escape({:safe, "<i class='user icon'></i>Profile"}), to: profile_path(@conn, :index), class: "item" %>
+                    <%= link html_escape({:safe, "<i class='payment icon'></i>Payment History"}), to: user_payment_path(@conn, :index), class: "item" %>
+                    <%= link html_escape({:safe, "<i class='users icon'></i>Renew Membership"}), to: user_membership_path(@conn, :index), class: "active item" %>
+                    <%= link html_escape({:safe, "<i class='calendar icon'></i>Events"}), to: user_event_path(@conn, :index), class: "item" %>
+                    <%= link html_escape({:safe, "<i class='birthday icon'></i>Vouchers"}), to: user_rebate_path(@conn, :index), class: "item" %>
+                    <%= link html_escape({:safe, "<i class='university icon'></i>Resources"}), to: user_resource_path(@conn, :index), class: "item" %>
+                    <%= link html_escape({:safe, "<i class='talk icon'></i>Enquiries"}), to: user_enquiry_path(@conn, :index), class: "item" %>
+                  <%= end %>
+                  <%= if Regex.match?(~r/\/membership\/edit\/\d+$/, @conn.request_path) do %>
+                    <%= link html_escape({:safe, "<i class='home icon'></i>Home"}), to: user_path(@conn, :index), class: "item" %>
+                    <%= link html_escape({:safe, "<i class='user icon'></i>Profile"}), to: profile_path(@conn, :index), class: "item" %>
+                    <%= link html_escape({:safe, "<i class='payment icon'></i>Payment History"}), to: user_payment_path(@conn, :index), class: "item" %>
+                    <%= link html_escape({:safe, "<i class='users icon'></i>Renew Membership"}), to: user_membership_path(@conn, :index), class: "active item" %>
+                    <%= link html_escape({:safe, "<i class='calendar icon'></i>Events"}), to: user_event_path(@conn, :index), class: "item" %>
+                    <%= link html_escape({:safe, "<i class='birthday icon'></i>Vouchers"}), to: user_rebate_path(@conn, :index), class: "item" %>
+                    <%= link html_escape({:safe, "<i class='university icon'></i>Resources"}), to: user_resource_path(@conn, :index), class: "item" %>
+                    <%= link html_escape({:safe, "<i class='talk icon'></i>Enquiries"}), to: user_enquiry_path(@conn, :index), class: "item" %>
+                  <%= end %>
+                  <%= if Regex.match?(~r/\/membership\/payment\/\d+$/, @conn.request_path) do %>
+                    <%= link html_escape({:safe, "<i class='home icon'></i>Home"}), to: user_path(@conn, :index), class: "item" %>
+                    <%= link html_escape({:safe, "<i class='user icon'></i>Profile"}), to: profile_path(@conn, :index), class: "item" %>
+                    <%= link html_escape({:safe, "<i class='payment icon'></i>Payment History"}), to: user_payment_path(@conn, :index), class: "item" %>
+                    <%= link html_escape({:safe, "<i class='users icon'></i>Renew Membership"}), to: user_membership_path(@conn, :index), class: "active item" %>
+                    <%= link html_escape({:safe, "<i class='calendar icon'></i>Events"}), to: user_event_path(@conn, :index), class: "item" %>
+                    <%= link html_escape({:safe, "<i class='birthday icon'></i>Vouchers"}), to: user_rebate_path(@conn, :index), class: "item" %>
+                    <%= link html_escape({:safe, "<i class='university icon'></i>Resources"}), to: user_resource_path(@conn, :index), class: "item" %>
+                    <%= link html_escape({:safe, "<i class='talk icon'></i>Enquiries"}), to: user_enquiry_path(@conn, :index), class: "item" %>
+                  <%= end %>
+                  <%= if @conn.request_path == "/events" do %>
+                    <%= link html_escape({:safe, "<i class='home icon'></i>Home"}), to: user_path(@conn, :index), class: "item" %>
+                    <%= link html_escape({:safe, "<i class='user icon'></i>Profile"}), to: profile_path(@conn, :index), class: "item" %>
+                    <%= link html_escape({:safe, "<i class='payment icon'></i>Payment History"}), to: user_payment_path(@conn, :index), class: "item" %>
+                    <%= link html_escape({:safe, "<i class='users icon'></i>Renew Membership"}), to: user_membership_path(@conn, :index), class: "item" %>
+                    <%= link html_escape({:safe, "<i class='calendar icon'></i>Events"}), to: user_event_path(@conn, :index), class: "active item" %>
+                    <%= link html_escape({:safe, "<i class='birthday icon'></i>Vouchers"}), to: user_rebate_path(@conn, :index), class: "item" %>
+                    <%= link html_escape({:safe, "<i class='university icon'></i>Resources"}), to: user_resource_path(@conn, :index), class: "item" %>
+                    <%= link html_escape({:safe, "<i class='talk icon'></i>Enquiries"}), to: user_enquiry_path(@conn, :index), class: "item" %>
+                  <%= end %>
+                  <%= if @conn.request_path == "/events/" do %>
+                    <%= link html_escape({:safe, "<i class='home icon'></i>Home"}), to: user_path(@conn, :index), class: "item" %>
+                    <%= link html_escape({:safe, "<i class='user icon'></i>Profile"}), to: profile_path(@conn, :index), class: "item" %>
+                    <%= link html_escape({:safe, "<i class='payment icon'></i>Payment History"}), to: user_payment_path(@conn, :index), class: "item" %>
+                    <%= link html_escape({:safe, "<i class='users icon'></i>Renew Membership"}), to: user_membership_path(@conn, :index), class: "item" %>
+                    <%= link html_escape({:safe, "<i class='calendar icon'></i>Events"}), to: user_event_path(@conn, :index), class: "active item" %>
+                    <%= link html_escape({:safe, "<i class='birthday icon'></i>Vouchers"}), to: user_rebate_path(@conn, :index), class: "item" %>
+                    <%= link html_escape({:safe, "<i class='university icon'></i>Resources"}), to: user_resource_path(@conn, :index), class: "item" %>
+                    <%= link html_escape({:safe, "<i class='talk icon'></i>Enquiries"}), to: user_enquiry_path(@conn, :index), class: "item" %>
+                  <%= end %>
+                  <%= if @conn.request_path == "/vouchers" do %>
+                    <%= link html_escape({:safe, "<i class='home icon'></i>Home"}), to: user_path(@conn, :index), class: "item" %>
+                    <%= link html_escape({:safe, "<i class='user icon'></i>Profile"}), to: profile_path(@conn, :index), class: "item" %>
+                    <%= link html_escape({:safe, "<i class='payment icon'></i>Payment History"}), to: user_payment_path(@conn, :index), class: "item" %>
+                    <%= link html_escape({:safe, "<i class='users icon'></i>Renew Membership"}), to: user_membership_path(@conn, :index), class: "item" %>
+                    <%= link html_escape({:safe, "<i class='calendar icon'></i>Events"}), to: user_event_path(@conn, :index), class: "item" %>
+                    <%= link html_escape({:safe, "<i class='birthday icon'></i>Vouchers"}), to: user_rebate_path(@conn, :index), class: "active item" %>
+                    <%= link html_escape({:safe, "<i class='university icon'></i>Resources"}), to: user_resource_path(@conn, :index), class: "item" %>
+                    <%= link html_escape({:safe, "<i class='talk icon'></i>Enquiries"}), to: user_enquiry_path(@conn, :index), class: "item" %>
+                  <%= end %>
+                  <%= if @conn.request_path == "/vouchers/" do %>
+                    <%= link html_escape({:safe, "<i class='home icon'></i>Home"}), to: user_path(@conn, :index), class: "item" %>
+                    <%= link html_escape({:safe, "<i class='user icon'></i>Profile"}), to: profile_path(@conn, :index), class: "item" %>
+                    <%= link html_escape({:safe, "<i class='payment icon'></i>Payment History"}), to: user_payment_path(@conn, :index), class: "item" %>
+                    <%= link html_escape({:safe, "<i class='users icon'></i>Renew Membership"}), to: user_membership_path(@conn, :index), class: "item" %>
+                    <%= link html_escape({:safe, "<i class='calendar icon'></i>Events"}), to: user_event_path(@conn, :index), class: "item" %>
+                    <%= link html_escape({:safe, "<i class='birthday icon'></i>Vouchers"}), to: user_rebate_path(@conn, :index), class: "active item" %>
+                    <%= link html_escape({:safe, "<i class='university icon'></i>Resources"}), to: user_resource_path(@conn, :index), class: "item" %>
+                    <%= link html_escape({:safe, "<i class='talk icon'></i>Enquiries"}), to: user_enquiry_path(@conn, :index), class: "item" %>
+                  <%= end %>
+                  <%= if @conn.request_path == "/resources" do %>
+                    <%= link html_escape({:safe, "<i class='home icon'></i>Home"}), to: user_path(@conn, :index), class: "item" %>
+                    <%= link html_escape({:safe, "<i class='user icon'></i>Profile"}), to: profile_path(@conn, :index), class: "item" %>
+                    <%= link html_escape({:safe, "<i class='payment icon'></i>Payment History"}), to: user_payment_path(@conn, :index), class: "item" %>
+                    <%= link html_escape({:safe, "<i class='users icon'></i>Renew Membership"}), to: user_membership_path(@conn, :index), class: "item" %>
+                    <%= link html_escape({:safe, "<i class='calendar icon'></i>Events"}), to: user_event_path(@conn, :index), class: "item" %>
+                    <%= link html_escape({:safe, "<i class='birthday icon'></i>Vouchers"}), to: user_rebate_path(@conn, :index), class: "item" %>
+                    <%= link html_escape({:safe, "<i class='university icon'></i>Resources"}), to: user_resource_path(@conn, :index), class: "active item" %>
+                    <%= link html_escape({:safe, "<i class='talk icon'></i>Enquiries"}), to: user_enquiry_path(@conn, :index), class: "item" %>
+                  <%= end %>
+                  <%= if @conn.request_path == "/resources/" do %>
+                    <%= link html_escape({:safe, "<i class='home icon'></i>Home"}), to: user_path(@conn, :index), class: "item" %>
+                    <%= link html_escape({:safe, "<i class='user icon'></i>Profile"}), to: profile_path(@conn, :index), class: "item" %>
+                    <%= link html_escape({:safe, "<i class='payment icon'></i>Payment History"}), to: user_payment_path(@conn, :index), class: "item" %>
+                    <%= link html_escape({:safe, "<i class='users icon'></i>Renew Membership"}), to: user_membership_path(@conn, :index), class: "item" %>
+                    <%= link html_escape({:safe, "<i class='calendar icon'></i>Events"}), to: user_event_path(@conn, :index), class: "item" %>
+                    <%= link html_escape({:safe, "<i class='birthday icon'></i>Vouchers"}), to: user_rebate_path(@conn, :index), class: "item" %>
+                    <%= link html_escape({:safe, "<i class='university icon'></i>Resources"}), to: user_resource_path(@conn, :index), class: "active item" %>
+                    <%= link html_escape({:safe, "<i class='talk icon'></i>Enquiries"}), to: user_enquiry_path(@conn, :index), class: "item" %>
+                  <%= end %>
+                  <%= if @conn.request_path == "/user_enquiries" do %>
+                    <%= link html_escape({:safe, "<i class='home icon'></i>Home"}), to: user_path(@conn, :index), class: "item" %>
+                    <%= link html_escape({:safe, "<i class='user icon'></i>Profile"}), to: profile_path(@conn, :index), class: "item" %>
+                    <%= link html_escape({:safe, "<i class='payment icon'></i>Payment History"}), to: user_payment_path(@conn, :index), class: "item" %>
+                    <%= link html_escape({:safe, "<i class='users icon'></i>Renew Membership"}), to: user_membership_path(@conn, :index), class: "item" %>
+                    <%= link html_escape({:safe, "<i class='calendar icon'></i>Events"}), to: user_event_path(@conn, :index), class: "item" %>
+                    <%= link html_escape({:safe, "<i class='birthday icon'></i>Vouchers"}), to: user_rebate_path(@conn, :index), class: "item" %>
+                    <%= link html_escape({:safe, "<i class='university icon'></i>Resources"}), to: user_resource_path(@conn, :index), class: "item" %>
+                    <%= link html_escape({:safe, "<i class='talk icon'></i>Enquiries"}), to: user_enquiry_path(@conn, :index), class: "active item" %>
+                  <%= end %>
+                  <%= if @conn.request_path == "/user_enquiries/" do %>
+                    <%= link html_escape({:safe, "<i class='home icon'></i>Home"}), to: user_path(@conn, :index), class: "item" %>
+                    <%= link html_escape({:safe, "<i class='user icon'></i>Profile"}), to: profile_path(@conn, :index), class: "item" %>
+                    <%= link html_escape({:safe, "<i class='payment icon'></i>Payment History"}), to: user_payment_path(@conn, :index), class: "item" %>
+                    <%= link html_escape({:safe, "<i class='users icon'></i>Renew Membership"}), to: user_membership_path(@conn, :index), class: "item" %>
+                    <%= link html_escape({:safe, "<i class='calendar icon'></i>Events"}), to: user_event_path(@conn, :index), class: "item" %>
+                    <%= link html_escape({:safe, "<i class='birthday icon'></i>Vouchers"}), to: user_rebate_path(@conn, :index), class: "item" %>
+                    <%= link html_escape({:safe, "<i class='university icon'></i>Resources"}), to: user_resource_path(@conn, :index), class: "item" %>
+                    <%= link html_escape({:safe, "<i class='talk icon'></i>Enquiries"}), to: user_enquiry_path(@conn, :index), class: "active item" %>
+                  <%= end %>
+                  <%= if @conn.request_path == "/user_enquiries/new" do %>
+                    <%= link html_escape({:safe, "<i class='home icon'></i>Home"}), to: user_path(@conn, :index), class: "item" %>
+                    <%= link html_escape({:safe, "<i class='user icon'></i>Profile"}), to: profile_path(@conn, :index), class: "item" %>
+                    <%= link html_escape({:safe, "<i class='payment icon'></i>Payment History"}), to: user_payment_path(@conn, :index), class: "item" %>
+                    <%= link html_escape({:safe, "<i class='users icon'></i>Renew Membership"}), to: user_membership_path(@conn, :index), class: "item" %>
+                    <%= link html_escape({:safe, "<i class='calendar icon'></i>Events"}), to: user_event_path(@conn, :index), class: "item" %>
+                    <%= link html_escape({:safe, "<i class='birthday icon'></i>Vouchers"}), to: user_rebate_path(@conn, :index), class: "item" %>
+                    <%= link html_escape({:safe, "<i class='university icon'></i>Resources"}), to: user_resource_path(@conn, :index), class: "item" %>
+                    <%= link html_escape({:safe, "<i class='talk icon'></i>Enquiries"}), to: user_enquiry_path(@conn, :index), class: "active item" %>
+                  <%= end %>
+                  <%= if @conn.request_path == "/user_enquiries/new/" do %>
+                    <%= link html_escape({:safe, "<i class='home icon'></i>Home"}), to: user_path(@conn, :index), class: "item" %>
+                    <%= link html_escape({:safe, "<i class='user icon'></i>Profile"}), to: profile_path(@conn, :index), class: "item" %>
+                    <%= link html_escape({:safe, "<i class='payment icon'></i>Payment History"}), to: user_payment_path(@conn, :index), class: "item" %>
+                    <%= link html_escape({:safe, "<i class='users icon'></i>Renew Membership"}), to: user_membership_path(@conn, :index), class: "item" %>
+                    <%= link html_escape({:safe, "<i class='calendar icon'></i>Events"}), to: user_event_path(@conn, :index), class: "item" %>
+                    <%= link html_escape({:safe, "<i class='birthday icon'></i>Vouchers"}), to: user_rebate_path(@conn, :index), class: "item" %>
+                    <%= link html_escape({:safe, "<i class='university icon'></i>Resources"}), to: user_resource_path(@conn, :index), class: "item" %>
+                    <%= link html_escape({:safe, "<i class='talk icon'></i>Enquiries"}), to: user_enquiry_path(@conn, :index), class: "active item" %>
+                  <%= end %>
+                  <%= if Regex.match?(~r/\/user_enquiries\/reply\/\d+$/, @conn.request_path) do %>
+                    <%= link html_escape({:safe, "<i class='home icon'></i>Home"}), to: user_path(@conn, :index), class: "item" %>
+                    <%= link html_escape({:safe, "<i class='user icon'></i>Profile"}), to: profile_path(@conn, :index), class: "item" %>
+                    <%= link html_escape({:safe, "<i class='payment icon'></i>Payment History"}), to: user_payment_path(@conn, :index), class: "item" %>
+                    <%= link html_escape({:safe, "<i class='users icon'></i>Renew Membership"}), to: user_membership_path(@conn, :index), class: "item" %>
+                    <%= link html_escape({:safe, "<i class='calendar icon'></i>Events"}), to: user_event_path(@conn, :index), class: "item" %>
+                    <%= link html_escape({:safe, "<i class='birthday icon'></i>Vouchers"}), to: user_rebate_path(@conn, :index), class: "item" %>
+                    <%= link html_escape({:safe, "<i class='university icon'></i>Resources"}), to: user_resource_path(@conn, :index), class: "item" %>
+                    <%= link html_escape({:safe, "<i class='talk icon'></i>Enquiries"}), to: user_enquiry_path(@conn, :index), class: "active item" %>
+                  <%= end %>
+                  <%= link html_escape({:safe, "<i class='sign out icon'></i>Sign Out"}), to: session_path(@conn, :delete, @current_user), method: "delete", class: "item" %>
+              </div>
+          </div>
+      </div>
+
+      <div class="container">
+        <%= if @conn.request_path == "/dashboard" or @conn.request_path == "/dashboard/" do %>
+        <h3 class="ui dividing header">
+          <i class="large home icon"></i>
+          <div class="content">Your Membership Information
+          </div>
+        </h3>
+        <%= end %>
+        <%= if get_flash(@conn, :info) do %>
+          <div class="ui info message alert alert-info"><%= get_flash(@conn, :info) %></div>
+        <% end %>
+        <%= if get_flash(@conn, :error) do %>
+          <div class="ui error message alert alert-danger"><%= get_flash(@conn, :error) %></div>
+        <% end %>
+        <%= if get_flash(@conn, :warning) do %>
+          <div class="ui warning message alert alert-warning"><%= get_flash(@conn, :warning) %></div>
+        <% end %>
+        <%= render @view_module, @view_template, assigns %>
+      </div>
+    </div>
+  </body>
+  <footer>
+      <div id="copyrights">
+          <div class="inset">
+              <div class="bigcontainer">
+                  <div class="fl">
+                      <div class="logo"></div>
+                      <p>&copy; 2016 MSQH Members Website. All Rights Reserved.<br/>
+                          <a href="http://www.msqh.com.my/msqh/" target="_blank">Malaysian Society for Quality in Health</a><br/>
+                          <a href="https://izaak.my" class="ui grey mini icon label izaak" target="_blank">
+                            <i class="cube icon"></i>
+                            Built by Izaak&trade;
+                          </a>
+                      </p>
+                  </div>
+              </div>
+          </div>
+      </div>
+      <script src="<%= static_path(@conn, "/js/vendor.js") %>"></script>
+      <script src="<%= static_path(@conn, "/js/app.js") %>"></script>
+  </footer>
+
+</html>

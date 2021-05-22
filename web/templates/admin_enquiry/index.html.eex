@@ -1,0 +1,58 @@
+<h3 class="ui dividing header">
+  <i class="large talk icon"></i>
+  <div class="content">Enquiries
+  </div>
+</h3>
+<div class="ui breadcrumb">
+  <%= link "Dashboard", to: admin_path(@conn, :index) %>
+  <div class="divider"> / </div>
+  <div class="active section">Enquiries</div>
+</div>
+<%= if Enum.count(@enquiries) < 1 do %>
+<div class="ui relaxed divided list">
+No enquiries recorded
+</div>
+<%= end %>
+<%= unless is_nil(@enquiries) do %>
+<div class="ui comments">
+  <%= for user_enquiry <- @enquiries do %>
+  <div class="ui stacked fluid segment">
+    <%= unless user_enquiry.admin_replied do %>
+      <div class="ui red ribbon label">Need reply</div>
+    <%= end %>
+    <div class="comment">
+      <a class="avatar">
+        <img src="/images/avatar.png">
+      </a>
+      <div class="content">
+        <%= link user_enquiry.member.username, to: admin_path(@conn, :show, user_enquiry.member), class: "author", target: "_blank"  %>
+        <div class="metadata">
+          <span class="date"><%= Timex.Timezone.convert(user_enquiry.updated_at, "Asia/Kuala_Lumpur") |>
+          Timex.format!("%b %d, %Y at %l:%M%P", :strftime) %></span>
+        </div>
+        <div class="text">
+          <p><%= user_enquiry.message %> <%= unless is_nil(user_enquiry.enquiry_attachment_path) do %>
+          <%= link html_escape({:safe, "<span class='ui tiny pink label'><i class='attach icon'></i>Attachment</span>"}), to: "/" <> MsqhPortal.EnquiryAttachment.url({user_enquiry.enquiry_attachment_path, user_enquiry}, :original)
+          |> String.split_at(13)
+          |> Tuple.delete_at(0)
+          |> Tuple.to_list
+          |> Enum.join, target: "_blank"  %>
+          <%= end %></p>
+        </div>
+        <%= if Enum.count(user_enquiry.enquiry_responses) > 0 do %>
+        <div class="actions">
+          <%= link html_escape({:safe, "Go to conversation (" <> to_string(Enum.count(user_enquiry.enquiry_responses)) <> ")"}), to: admin_enquiry_path(@conn, :reply, user_enquiry), class: "reply"  %>
+        </div>
+        <%= end %>
+        <%= if Enum.count(user_enquiry.enquiry_responses) == 0 do %>
+        <div class="actions">
+          <%= link html_escape({:safe, "Reply"}), to: admin_enquiry_path(@conn, :reply, user_enquiry), class: "reply"  %>
+        </div>
+        <%= end %>
+      </div>
+    </div>
+  </div>
+  <%= end %>
+</div>
+<%= pagination_links @enquiries, view_style: :semantic%>
+<%= end %>

@@ -1,0 +1,35 @@
+<%= form_for @changeset, @action, fn f -> %>
+  <%= if @changeset.action do %>
+    <div class="alert alert-danger">
+      <p>Oops, something went wrong! Please check the errors below.</p>
+    </div>
+  <% end %>  
+
+  <div class="form-group">
+    <%= label f, :membership_category_id, "Membership Category", class: "control-label" %>
+    <%= select f, :membership_category_id, @membership_categories, class: "form-control", prompt: "Membership Category" %>
+    <%= error_tag f, :membership_category_id %>
+  </div>
+
+  <div class="form-group">
+    <%= label f, :membership_type_id, "Membership Type", class: "control-label" %>
+    <%= select f, :membership_type_id, @membership_types, class: "form-control", prompt: "Membership Type" %>
+    <%= error_tag f, :membership_type_id %>
+  </div>
+
+  <div class="form-group">
+    <%= label f, :facility_id, "Change Parent Account", class: "control-label" %>
+    <%= select f, :facility_id, @facilities, class: "form-control", prompt: "Parent Account" %>
+    <%= error_tag f, :facility_id %>
+  </div>
+
+  <div class="form-group">
+    <%= label f, :annual_price, class: "control-label" %>
+    <%= text_input f, :annual_price, class: "form-control" %>
+    <%= error_tag f, :annual_price %>
+  </div>
+
+  <div class="form-group">
+    <%= submit "Submit", class: "btn btn-primary" %>
+  </div>
+<% end %>

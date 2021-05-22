@@ -1,0 +1,64 @@
+<%= form_for @changeset, @action, [class: "ui form"], fn f -> %>
+  <%= if @changeset.action do %>
+    <div class="alert alert-danger">
+      <p>Oops, something went wrong! Please check the errors below.</p>
+    </div>
+  <% end %>
+
+  <div class="fields">
+    <div class="six wide field">
+      <%= label f, :title, class: "control-label" %>
+      <%= text_input f, :title, class: "form-control" %>
+      <%= error_tag f, :title %>
+    </div>
+    <div class="ten wide field">
+      <%= label f, :description, class: "control-label" %>
+      <%= text_input f, :description, class: "form-control" %>
+      <%= error_tag f, :description %>
+    </div>
+  </div>
+
+  <div class="field">
+    <%= label f, :active_from, "Event Start Date/Time", class: "control-label"  %>
+    <div class="inline fields">
+      <div class="fifteen wide field">
+        <%= datetime_select f, :active_from, year: [options: List.first(Tuple.to_list(Integer.parse(Timex.format!(Timex.now, "{YYYY}"))))..List.first(Tuple.to_list(Integer.parse(Timex.format!(Timex.shift(Timex.now, years: 1), "{YYYY}"))))],
+        builder: fn b -> %>
+            <div class="field"><%= b.(:day, [class: "ui fluid search dropdown", prompt: "Day", id: "day"]) %></div>
+            <div class="field"><%= b.(:month, [class: "ui fluid search dropdown", prompt: "Month"]) %></div>
+            <div class="field"><%= b.(:year, [class: "ui fluid search dropdown", prompt: "Year"]) %></div>
+            <div class="field"><%= b.(:hour, [class: "ui fluid search dropdown", prompt: "Hour"]) %></div>
+            <div class="field"><%= b.(:minute, [class: "ui fluid search dropdown", prompt: "Minute"]) %></div>
+        <%= end %>
+        <%= error_tag f, :active_from %>
+      </div>
+    </div>
+  </div>
+
+  <div class="field">
+    <%= label f, :active_to, "Event End Date/Time", class: "control-label"  %>
+    <div class="inline fields">
+      <div class="sixteen wide field">
+        <%= datetime_select f, :active_to, year: [options: List.first(Tuple.to_list(Integer.parse(Timex.format!(Timex.now, "{YYYY}"))))..List.first(Tuple.to_list(Integer.parse(Timex.format!(Timex.shift(Timex.now, years: 1), "{YYYY}"))))],
+        builder: fn b -> %>
+        <div class="field"><%= b.(:day, [class: "ui fluid search dropdown", prompt: "Day"]) %></div>
+        <div class="field"><%= b.(:month, [class: "ui fluid search dropdown", prompt: "Month"]) %></div>
+        <div class="field"><%= b.(:year, [class: "ui fluid search dropdown", prompt: "Year"]) %></div>
+        <div class="field"><%= b.(:hour, [class: "ui fluid search dropdown", prompt: "Hour"]) %></div>
+        <div class="field"><%= b.(:minute, [class: "ui fluid search dropdown", prompt: "Minute"]) %></div>
+        <%= end %>
+        <%= error_tag f, :active_to %>
+      </div>
+    </div>
+  </div>
+
+  <div class="field">
+    <%= label f, :admission_price, "Admission Price (RM)", class: "control-label" %>
+    <%= text_input f, :admission_price, class: "form-control" %>
+    <%= error_tag f, :admission_price %>
+  </div>
+
+  <div class="field">
+    <%= submit "Submit", class: "ui teal submit button" %>
+  </div>
+<% end %>

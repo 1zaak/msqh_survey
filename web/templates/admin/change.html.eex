@@ -1,0 +1,31 @@
+<div class="ui grid">
+  <div class="sixteen wide column">
+    <div class="ui breadcrumb">
+      <%= link "Dashboard", to: admin_path(@conn, :index) %>
+      <div class="divider"> / </div>
+      <%= link "User & Membership", to: admin_path(@conn, :show, @user) %>
+      <div class="divider"> / </div>
+      <div class="active section">Change password</div>
+    </div>
+    <div class="pageHeader">
+      <div class="segment">
+        <h3 class="ui dividing header">
+          <i class="large alternate unlock icon"></i>
+          <div class="content">Change password for <%= @user.username %>
+          </div>
+        </h3>
+      </div>
+      <br/>
+      <div class="ui grid">
+        <div class="eight wide column">
+          <div class="ui padded segment">
+            <%= render "change_form.html", changeset: @changeset,
+                                    action: admin_path(@conn, :change_password, @user)%>
+                                    <br/>
+            <%= link "Back", to: admin_path(@conn, :show, @user) %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

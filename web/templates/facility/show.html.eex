@@ -1,0 +1,18 @@
+<h2>Show facility</h2>
+
+<ul>
+
+  <li>
+    <strong>Facility name:</strong>
+    <%= @facility.facility_name %>
+  </li>
+
+  <li>
+    <strong>Membership:</strong>
+    <%= @facility.membership_id %>
+  </li>
+
+</ul>
+
+<%= link "Edit", to: facility_path(@conn, :edit, @facility) %>
+<%= link "Back", to: facility_path(@conn, :index) %>

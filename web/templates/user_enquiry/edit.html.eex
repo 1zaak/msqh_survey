@@ -1,0 +1,95 @@
+<div class="ui grid">
+  <!--the vertical side menu-->
+  <div class="four wide column">
+      <div class="verticalMenu">
+          <div class="ui vertical pointing menu fluid">
+              <%= link html_escape({:safe, "<i class='home icon'></i>Home"}), to: user_path(@conn, :index), class: "item" %>
+              <%= link html_escape({:safe, "<i class='user icon'></i>Profile"}), to: profile_path(@conn, :index), class: "item" %>
+              <%= link html_escape({:safe, "<i class='payment icon'></i>Payment History"}), to: user_payment_path(@conn, :index), class: "item" %>
+              <%= link html_escape({:safe, "<i class='users icon'></i>Renew Membership"}), to: user_membership_path(@conn, :index), class: "item" %>
+              <%= link html_escape({:safe, "<i class='calendar icon'></i>Events"}), to: user_event_path(@conn, :index), class: "item" %>
+              <%= link html_escape({:safe, "<i class='birthday icon'></i>Vouchers"}), to: user_rebate_path(@conn, :index), class: "teal item" %>
+              <%= link html_escape({:safe, "<i class='university icon'></i>Resources"}), to: user_resource_path(@conn, :index), class: "item" %>
+              <%= link html_escape({:safe, "<i class='info icon'></i>Help"}), to: user_enquiry_path(@conn, :index), class: "active teal item" %>
+          </div>
+      </div>
+  </div>
+
+  <!--the main content-->
+  <div class="twelve wide column">
+    <div class="pageHeader">
+      <div class="segment">
+        <h3 class="ui dividing header">
+          <i class="large info icon"></i>
+          <div class="content">Enquiry
+          </div>
+        </h3>
+      </div>
+    </div>
+
+    <%= unless is_nil(@user_enquiries) do %>
+    <div class="ui comments">
+      <%= for user_enquiry <- @user_enquiries do %>
+      <div class="comment">
+        <a class="avatar">
+          <img src="/images/avatar/small/elliot.jpg">
+        </a>
+        <div class="content">
+          <a class="author"><%= @current_user.username %></a>
+          <div class="metadata">
+            <span class="date"><%= Timex.Timezone.convert(user_enquiry.updated_at, "Asia/Kuala_Lumpur") |>
+            Timex.format!("%b %d, %Y at %l:%M%p", :strftime) %></span>
+          </div>
+          <div class="text">
+            <p><%= user_enquiry.message %> <%= unless is_nil(user_enquiry.enquiry_attachment_path) do %>
+            <%= link html_escape({:safe, "<i class='camera retro icon'></i>"}), to: MsqhPortal.EnquiryAttachment.url({user_enquiry.enquiry_attachment_path, user_enquiry}, :original)
+            |> String.split_at(13)
+            |> Tuple.delete_at(0)
+            |> Tuple.to_list
+            |> Enum.join, target: "_blank"  %>
+              <%= else %>
+            <%= end %></p>
+          </div>
+        </div>
+        <%= if Enum.count(user_enquiry.enquiry_responses) > 0 do %>
+          <%= for enquiry_response <- user_enquiry.enquiry_responses do %>
+          <div class="comments">
+            <div class="comment">
+              <a class="avatar">
+                <img src="/images/avatar/small/jenny.jpg">
+              </a>
+              <div class="content">
+                <a class="author"><%= enquiry_response.admin.username %></a>
+                <div class="metadata">
+                  <span class="date"><%= Timex.Timezone.convert(enquiry_response.updated_at, "Asia/Kuala_Lumpur") |>
+                  Timex.format!("%b %d, %Y at %l:%M%p", :strftime) %></span>
+                </div>
+                <div class="text">
+                  <%= enquiry_response.message %>
+                </div>
+                <div class="actions">
+                  <%= link html_escape({:safe, "Reply"}), to: user_enquiry_path(@conn, :edit, user_enquiry), class: "reply"  %>
+                </div>
+              </div>
+            </div>
+          </div>
+          <%= end %>
+        <%= end %>
+      </div>
+      <%= end %>
+
+    </div>
+    <%= render "response.html", changeset: @changeset,
+                            action: user_enquiry_path(@conn, :response) %>
+    <!-- <div class="row">
+      <div class="four wide column"><%= link html_escape({:safe, "<i class='huge outline talk icon'></i>"}), to: user_enquiry_path(@conn, :new), class: "right floated column"  %></div>
+    </div> -->
+    <% else %>
+    <%= render "response.html", changeset: @changeset,
+                            action: user_enquiry_path(@conn, :response) %>
+    <%= end %>
+
+
+  </div>
+
+</div>

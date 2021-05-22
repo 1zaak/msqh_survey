@@ -1,0 +1,28 @@
+<h2>Listing facilities</h2>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>Facility name</th>
+      <th>Membership</th>
+
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+<%= for facility <- @facilities do %>
+    <tr>
+      <td><%= facility.facility_name %></td>
+      <td><%= facility.membership_id %></td>
+
+      <td class="text-right">
+        <%= link "Show", to: facility_path(@conn, :show, facility), class: "btn btn-default btn-xs" %>
+        <%= link "Edit", to: facility_path(@conn, :edit, facility), class: "btn btn-default btn-xs" %>
+        <%= link "Delete", to: facility_path(@conn, :delete, facility), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-danger btn-xs" %>
+      </td>
+    </tr>
+<% end %>
+  </tbody>
+</table>
+
+<%= link "New facility", to: facility_path(@conn, :new) %>

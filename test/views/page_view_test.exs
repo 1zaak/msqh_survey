@@ -1,3 +1,3 @@
-defmodule Msqh.PageViewTest do
-  use Msqh.ConnCase, async: true
+defmodule MsqhPortal.PageViewTest do
+  use MsqhPortal.ConnCase, async: true
 end

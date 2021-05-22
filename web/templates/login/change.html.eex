@@ -1,0 +1,24 @@
+<div class="ui grid">
+  <div class="sixteen wide column">
+    <div class="pageHeader">
+      <div class="segment">
+        <h3 class="ui dividing header">
+          <i class="large alternate unlock icon"></i>
+          <div class="content">Reset password
+          </div>
+        </h3>
+      </div>
+      <br/>
+      <div class="ui grid">
+        <div class="sixteen wide column">
+          <div class="ui padded segment">
+            <%= render "ask_email.html", changeset: @changeset,
+                                    action: login_path(@conn, :change_password)%>
+                                    <br/>
+            <%= link "Back", to: login_path(@conn, :index) %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

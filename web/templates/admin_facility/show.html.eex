@@ -1,0 +1,66 @@
+<h3 class="ui dividing header">
+<i class="large money icon"></i>
+<div class="content"><%= @facility.facility_name %> (Membership Prices)</div>
+</h3>
+<div class="ui breadcrumb">
+  <%= link "Dashboard", to: admin_path(@conn, :index) %>
+  <div class="divider"> / </div>
+  <%= link "Facilities", to: admin_facility_path(@conn, :index) %>
+  <div class="divider"> / </div>
+  <div class="active section"><%= @facility.facility_name %></div>
+</div>
+
+
+<table class="ui padded table">
+  <thead>
+    <tr>
+      <th>Membership Category</th>
+      <th>Membership Type</th>
+      <th>Life Membership Price</th>
+      <th>New Membership Annual Price</th>
+      <th>Renewal Membership Annual Price</th>
+      <th class="center aligned">Action</th>
+    </tr>
+  </thead>
+  <tbody>
+ <%= for package <- @facility.packages do %>
+    <tr>
+      <td><%= package.membership_category.membership_category_name %></td>
+      <td>
+        <%= unless is_nil(package.membership_type) do %>
+          <%= package.membership_type.membership_type_name %>
+        <%= else %>
+          -
+        <%= end %>
+      </td>
+      <td>
+        <%= unless is_nil(package.life_membership_price) do %>
+          <%= package.life_membership_price %>
+        <%= else %>
+          -
+        <%= end %>
+      </td>
+      <td>
+        <%= unless is_nil(package.new_member_annual_price) do %>
+          <%= package.new_member_annual_price %>
+        <%= else %>
+          -
+        <%= end %>
+      </td>
+      <td>
+        <%= unless is_nil(package.renewal_existing_member_annual_price) do %>
+          <%= package.renewal_existing_member_annual_price %>
+        <%= else %>
+          -
+        <%= end %>
+      </td>
+
+      <td class="center aligned">
+        <%= link html_escape({:safe, "<i class='large edit icon'></i>"}), to: admin_facility_path(@conn, :edit_package, package) %>
+      </td>
+    </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<%= link "Back", to: admin_facility_path(@conn, :index) %>

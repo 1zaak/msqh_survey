@@ -1,0 +1,111 @@
+<div class="ui grid">
+  <!--the vertical side menu-->
+  <div class="four wide column">
+      <div class="verticalMenu">
+          <div class="ui vertical pointing menu fluid">
+              <%= link html_escape({:safe, "<i class='home icon'></i>Home"}), to: user_path(@conn, :index), class: "item" %>
+              <%= link html_escape({:safe, "<i class='user icon'></i>Profile"}), to: profile_path(@conn, :index), class: "item" %>
+              <%= link html_escape({:safe, "<i class='payment icon'></i>Payment History"}), to: user_payment_path(@conn, :index), class: "active teal item" %>
+              <%= link html_escape({:safe, "<i class='users icon'></i>Renew Membership"}), to: user_membership_path(@conn, :index), class: "item" %>
+              <%= link html_escape({:safe, "<i class='calendar icon'></i>Events"}), to: user_event_path(@conn, :index), class: "item" %>
+              <%= link html_escape({:safe, "<i class='birthday icon'></i>Vouchers"}), to: user_rebate_path(@conn, :index), class: "teal item" %>
+              <%= link html_escape({:safe, "<i class='university icon'></i>Resources"}), to: user_resource_path(@conn, :index), class: "item" %>
+              <%= link html_escape({:safe, "<i class='info icon'></i>Help"}), to: user_enquiry_path(@conn, :index), class: "item" %>
+          </div>
+      </div>
+  </div>
+
+  <!--the main content-->
+  <div class="twelve wide column">
+    <div class="pageHeader">
+      <div class="segment">
+        <h3 class="ui dividing header">
+          <i class="large payment icon"></i>
+          <div class="content">Payment History
+          </div>
+        </h3>
+      </div>
+<%= unless Enum.count(@payment_history) < 1 do %>
+    <table class="ui celled table">
+      <thead>
+        <tr>
+          <th>Facility</th>
+          <th>Membership Category</th>
+          <th>Membership Type</th>
+          <th>Annual Fee</th>
+          <th>Membership Expiration Date</th>
+          <th>Proof of Payment</th>
+          <th>Receipt</th>
+          <th>Verified</th>
+        </tr>
+      </thead>
+      <tbody>
+    <%= for payment <- @payment_history do %>
+        <tr>
+          <td><%= payment.facility.facility_name %></td>
+          <td><%= payment.membership_category.membership_category_name %></td>
+          <td>
+            <%= unless is_nil(payment.membership_type) do %>
+              <%= payment.membership_type.membership_type_name %>
+              <%= else %>
+              -
+            <%= end %>
+          </td>
+          <td>
+            <%= unless is_nil(payment.package.life_membership_price) do %>
+              <%= payment.package.life_membership_price %>
+            <%= end %>
+            <%= unless is_nil(payment.package.new_member_annual_price) do %>
+              <%= payment.package.new_member_annual_price %>
+            <%= end %>
+            <%= unless is_nil(payment.package.renewal_existing_member_annual_price) do %>
+              <%= payment.package.renewal_existing_member_annual_price %>
+            <%= end %>
+          </td>
+          <td><%= unless is_nil(payment.membership.active_to) do %><%= Timex.format!(payment.membership.active_to, "%b %d, %Y", :strftime) %><%= else %>-<%= end %></td>
+          <td>
+            <%= unless is_nil(payment.membership.proof_payment_path) do %>
+            <%= link payment.payment_type.name, to: MsqhPortal.ProofPayment.url({payment.membership.proof_payment_path, payment.membership}, :original)
+            |> String.split_at(12)
+            |> Tuple.delete_at(0)
+            |> Tuple.to_list
+            |> Enum.join, target: "_blank"  %>
+            <%= else %>
+            -
+          <%= end %>
+          </td>
+          <%= unless is_nil(payment.receipt_path) do %>
+          <td class="ui center aligned header">
+            <%= unless is_nil(payment.receipt_path) do %>
+            <%= link html_escape({:safe, "<i class='file pdf outline icon'></i>"}), to: MsqhPortal.Receipt.url({payment.receipt_path, payment.membership}, :original)
+            |> String.split_at(12)
+            |> Tuple.delete_at(0)
+            |> Tuple.to_list
+            |> Enum.join, target: "_blank"  %>
+              <%= else %>
+              -
+            <%= end %>
+          </td>
+          <%= else %>
+          <td>-</td>
+          <%= end %>
+          <td class="ui center aligned header">
+            <%= if payment.membership.payment_verified do %>
+              <i class='green checkmark icon'></i>
+              <%= else %>
+              <i class='red remove icon'></i>
+            <%= end %>
+          </td>
+        </tr>
+    <% end %>
+      </tbody>
+    </table>
+    <% else %>
+    <div class="ui relaxed divided list">
+    No payments logged
+    </div>
+    <% end %>
+    <%= pagination_links @payment_history, view_style: :semantic%>
+    </div>
+  </div>
+</div>

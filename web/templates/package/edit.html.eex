@@ -1,0 +1,9 @@
+<h2>Edit package</h2>
+
+<%= render "form.html", changeset: @changeset,
+                        action: package_path(@conn, :update, @package),
+                        membership_types: @membership_types,
+                        membership_categories: @membership_categories,
+                        facilities: @facilities %><br/>
+
+<%= link "Back", to: admin_facility_path(@conn, :show, @package.facility_id) %>

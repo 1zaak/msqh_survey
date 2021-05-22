@@ -1,0 +1,33 @@
+<h2>Show voucher</h2>
+
+<ul>
+
+  <li>
+    <strong>Code:</strong>
+    <%= @voucher.code %>
+  </li>
+
+  <li>
+    <strong>Discount percent:</strong>
+    <%= @voucher.discount_percent %>
+  </li>
+
+  <li>
+    <strong>Expire at:</strong>
+    <%= @voucher.expire_at %>
+  </li>
+
+  <li>
+    <strong>Valid:</strong>
+    <%= @voucher.valid %>
+  </li>
+
+  <li>
+    <strong>Event:</strong>
+    <%= @voucher.event_id %>
+  </li>
+
+</ul>
+
+<%= link "Edit", to: voucher_path(@conn, :edit, @voucher) %>
+<%= link "Back", to: voucher_path(@conn, :index) %>

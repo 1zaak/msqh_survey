@@ -1,0 +1,82 @@
+<div class="ui grid">
+  <!--the vertical side menu-->
+  <div class="four wide column">
+      <div class="verticalMenu">
+          <div class="ui vertical pointing menu fluid">
+              <%= link html_escape({:safe, "<i class='home icon'></i>Home"}), to: user_path(@conn, :index), class: "item" %>
+              <%= link html_escape({:safe, "<i class='user icon'></i>Profile"}), to: profile_path(@conn, :index), class: "active teal item" %>
+              <%= link html_escape({:safe, "<i class='payment icon'></i>Payment History"}), to: user_payment_path(@conn, :index), class: "item" %>
+              <%= link html_escape({:safe, "<i class='users icon'></i>Renew Membership"}), to: user_membership_path(@conn, :index), class: "item" %>
+              <%= link html_escape({:safe, "<i class='calendar icon'></i>Events"}), to: user_event_path(@conn, :index), class: "item" %>
+              <%= link html_escape({:safe, "<i class='university icon'></i>Resources"}), to: user_resource_path(@conn, :index), class: "item" %>
+              <%= link html_escape({:safe, "<i class='info icon'></i>Help"}), to: user_enquiry_path(@conn, :index), class: "item" %>
+          </div>
+      </div>
+  </div>
+  <!--the main content-->
+  <div class="twelve wide column">
+    <div class="pageHeader">
+      <div class="segment">
+        <h3 class="ui dividing header">
+          <i class="large user icon"></i>
+          <div class="content">Profile
+          </div>
+        </h3>
+      </div>
+    </div>
+    <div class="ui secondary menu">
+        <a class="item active" data-tab="profile">Profile</a>
+        <a class="item" data-tab="cv">CV</a>
+        <a class="item" data-tab="parent-account">Parent Account</a>
+        <a href="http://www.msqh.com.my/msqh/form?download=11:membership-application-form" class="blue ui button large" data-tab="cert"><i class="small download icon"></i>Member Certificate</a>
+    </div>
+    <div class="ui active tab segment" data-tab="profile">
+        <!--Profile 1st row-->
+        <%= render "form.html", changeset: @changeset,
+                                action: profile_path(@conn, :update, @user),
+                                facilities: @facilities %>
+
+    </div>
+
+    <!-- CV tab -->
+    <div class="ui bottom attached tab segment" data-tab="cv">
+        <!-- CV 1st row -->
+        <div class="ui two column stackable center aligned grid segment">
+          <div class="column">
+            <p>  <h5 class="ui header">Current CV</h5>
+            <%= if @cv_path do %>
+              <p>
+              <%= link html_escape({:safe, "<i class='download icon'></i>Download"}), to: @cv_path, target: "_blank", class: "ui labeled icon positive small ui button" %>
+              </p>
+            <%= end %></p>
+          </div>
+          <div class="ui horizontal divider header">
+            <i class="file pdf outline icon"></i>CV</div>
+          <div class="column">
+            <p><h5 class="ui header">Upload New CV</h5>
+              <%= render "cv_form.html", changeset: @cv_changeset,
+                                      action: profile_path(@conn, :update, @user) %>
+          </div>
+        </div>
+      </div>
+
+      <!-- Parent account tab -->
+      <div class="ui tab segment" data-tab="parent-account">
+        <!-- Parent-account 1st row -->
+        <div class="ui two column stackable center aligned grid">
+          <div class="column">
+            <p>  <h5 class="ui header">Parent Account</h5>
+              <%= @user.facility.facility_name %>
+            </p>
+          </div>
+          <div class="ui horizontal divider header"><i class="hospital icon"></i>Parent Account</div>
+          <div class="column">
+            <p><h5 class="ui header">Change Parent Account</h5>
+              <%= render "parent_account_form.html", changeset: @parent_account_changeset,
+                                      action: profile_path(@conn, :update, @user),
+                                      facilities: @facilities %>
+          </div>
+        </div>
+      </div>
+  </div>
+</div>

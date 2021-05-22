@@ -1,0 +1,6 @@
+<h2>New enquiry</h2>
+
+<%= render "form.html", changeset: @changeset,
+                        action: admin_enquiry_path(@conn, :create) %>
+
+<%= link "Back", to: admin_enquiry_path(@conn, :index) %>

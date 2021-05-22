@@ -1,0 +1,524 @@
+<div class="ui grid">
+
+  <div class="sixteen wide column">
+    <div class="ui breadcrumb">
+      <%= link "Dashboard", to: admin_path(@conn, :index) %>
+      <div class="divider"> / </div>
+      <div class="active section">User & Membership</div>
+    </div>
+    <div class="pageHeader">
+      <div class="segment">
+        <h3 class="ui dividing header">
+          <i class="large user icon"></i>
+          <div class="content">User & Membership (<%= @user.username %>)
+          </div>
+        </h3>
+      </div>
+    </div>
+    <div class="ui grid">
+      <div class="ten wide column">
+        <div class="ui fluid card">
+          <div class="content">
+            <h3 class="content">Membership Information</h3>
+            <div class="ui list">
+              <%= unless is_nil(@user.state) do %>
+                  <div class="item">
+                    <div class="content">
+                      <div class="description">
+                        <span><strong>Status:</strong> <%= if @user.state == "ACTIVE" do %><div class="ui green label"><%= @user.state %></div><%= end %>
+                          <%= unless is_nil(@user.active_from) and is_nil(@user.active_to) do %>
+                            <div class="ui green basic label">
+                              <%= Timex.Timezone.convert(@user.active_from, "Asia/Kuala_Lumpur")
+                              |> Timex.format!("%b %d, %Y", :strftime) %>
+                              &nbsp;<i class="long arrow right icon"></i><%= Timex.Timezone.convert(@user.active_to, "Asia/Kuala_Lumpur")
+                              |> Timex.format!("%b %d, %Y", :strftime) %>
+                            </div>
+                          <%= end %>
+                          <%= if @user.state == "PAID" do %><div class="ui yellow label"><%= @user.state %></div><%= end %>
+                          <%= if @user.state == "INACTIVE" do %><div class="ui orange label"><%= @user.state %></div><%= end %>
+                          <%= if @user.state == "EXPIRED" do %><div class="ui red label"><%= @user.state %></div><%= end %>
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                  <%= if @user.state == "PAID" or @user.state == "EXPIRED" or @user.state == "ACTIVE" do %>
+                    <%= unless is_nil(@user.facility) do %>
+                    <div class="item">
+                      <div class="content">
+                        <div class="description"><span><strong>Registered facility:</strong> <%= @user.facility.facility_name %></div>
+                      </div>
+                    </div>
+                    <%= end %>
+                  <%= end %>
+                  <%= unless is_nil(@user.membership_category) do %>
+                  <div class="item">
+                    <div class="content">
+                      <div class="description"><span><strong>Membership Category:</strong> <%= @user.membership_category.membership_category_name %></div>
+                    </div>
+                  </div>
+                  <%= end %>
+                  <%= unless is_nil(@user.membership_type) do %>
+                  <div class="item">
+                    <div class="content">
+                      <div class="description"><span><strong>Membership Type:</strong> <%= @user.membership_type.membership_type_name %></div>
+                    </div>
+                  </div>
+                  <%= end %>
+                  <%= unless is_nil(@user.receipt_path) do %>
+                  <div class="item">
+                    <div class="content">
+                      <div class="description"><span><strong>Receipt:</strong> <%= link html_escape({:safe, "<p class='ui gray label'><i class='ui tag icon'></i>View</p>"}), to: MsqhPortal.Receipt.url({@user.receipt_path, @user}, :original)
+                      |> String.split_at(12)
+                      |> Tuple.delete_at(0)
+                      |> Tuple.to_list
+                      |> Enum.join, target: "_blank" %></div>
+                    </div>
+                  </div>
+                  <%= end %>
+              <%= end %>
+            </div>
+          </div>
+        </div>
+
+        <%= unless is_nil(@user.membership) do %>
+        <div class="ui fluid card">
+          <div class="content">
+            <h3>Membership Renewal Process</h3>
+            <div class="ui list">
+              <div class="item">
+                <span>
+                  <strong>Status: </strong>
+                  <%= if @user.membership.state == "MEMBERSHIP SELECTION" do %>
+                  <div class="ui basic label">
+                    <i class='hourglass start icon'></i>
+                    Selected membership..
+                  </div>
+                  <%= end %>
+                  <%= if @user.membership.state == "PAYMENT SELECTION" do %>
+                  <div class="ui basic label">
+                    <i class='hourglass half icon'></i>
+                    Selected payment method..
+                  </div>
+                  <%= end %>
+                  <%= if @user.membership.state == "RECEIPT" do %>
+                  <div class="ui basic label">
+                    <i class='hourglass end icon'></i>
+                    Done..
+                  </div>
+
+                  <%= end %>
+
+                </span>
+              </div>
+              <%= if @user.membership.state == "MEMBERSHIP SELECTION" do %>
+              <div class="ui red segment">
+                <h4 class="ui header">USER ACTION</h4>
+                <div class="item">
+                  <%= unless is_nil(@user.membership.facility) do %>
+                  <div class="item">
+                    <strong>Facility:</strong> <%= @user.membership.facility.facility_name %>
+                  </div>
+                  <%= end %>
+                  <%= unless is_nil(@user.membership.membership_category) do %>
+                  <div class="item">
+                    <strong>Membership Category:</strong> <%= @user.membership.membership_category.membership_category_name %>
+                  </div>
+                  <%= end %>
+                  <%= unless is_nil(@user.membership.membership_type) do %>
+                  <div class="item">
+                    <strong>Membership Type:</strong> <%= @user.membership.membership_type.membership_type_name %>
+                  </div>
+                  <%= end %>
+                </div>
+              </div>
+              <%= end %>
+              <%= if @user.membership.state == "PAYMENT SELECTION" do %>
+                <%= unless is_nil(@proof_payment_path) do %>
+                <div class="ui yellow padded segment">
+                  <h4 class="ui header">USER ACTION</h4>
+                    <%= unless is_nil(@user.membership.facility) do %>
+                    <div class="item">
+                      <strong>Facility:</strong> <%= @user.membership.facility.facility_name %>
+                    </div>
+                    <%= end %>
+                    <%= unless is_nil(@user.membership.membership_category) do %>
+                    <div class="item">
+                      <strong>Membership Category:</strong> <%= @user.membership.membership_category.membership_category_name %>
+                    </div>
+                    <%= end %>
+                    <%= unless is_nil(@user.membership.membership_type) do %>
+                    <div class="item">
+                      <strong>Membership Type:</strong> <%= @user.membership.membership_type.membership_type_name %>
+                    </div>
+                    <%= end %>
+                    <div class="item">
+                      <strong>Proof of Payment:</strong> <%= link html_escape({:safe, "<p class='ui gray label'><i class='camera retro icon'></i>View</p>"}), to: @proof_payment_path, target: "_blank" %>
+                    </div>
+                </div>
+                <%= end %>
+              <%= end %>
+              <%= if @user.membership.state == "RECEIPT" do %>
+                <%= unless is_nil(@proof_payment_path) do %>
+                <div class="ui green padded segment">
+                  <h4 class="ui header">USER ACTION</h4>
+                  <div class="item">
+                    <strong>Proof of Payment:</strong> <%= link html_escape({:safe, "<p class='ui gray label'><i class='camera retro icon'></i>View</p>"}), to: @proof_payment_path, target: "_blank" %>
+                  </div>
+                </div>
+                <%= end %>
+              <%= end %>
+
+              <%= unless @user.membership.payment_verified do %>
+                <%= if @user.membership.state == "PAYMENT SELECTION" do %>
+
+                  <%= render "verify_form.html", changeset: @membership_changeset,
+                        action: admin_path(@conn, :verify),
+                        membership: @membership_info %>
+
+                <%= end %>
+              <%= end %>
+            </div>
+          </div>
+        </div>
+        <%= end %>
+      </div>
+      <div class="six wide column">
+        <div class="ui fluid card">
+          <div class="content">
+            <h3 class="content">Profile</h3>
+            <div class="list">
+              <div class="item">
+                <strong>Email</strong><i class="right triangle icon"></i>
+                <%= if is_nil(@user.email) do %>
+                  <i>-</i><br/>
+                <%= else %>
+                  <%= @user.email %><br/>
+                <%= end %>
+                <strong>Username</strong><i class="right triangle icon">
+                </i><%= if is_nil(@user.username) do %>
+                  <i>-</i><br/>
+                <%= else %>
+                  <%= @user.username %><br/>
+                <%= end %>
+                <strong>Title</strong><i class="right triangle icon"></i>
+                <%= if is_nil(@user.title) do %>
+                  <i>-</i><br/>
+                <%= else %>
+                  <%= @user.title %><br/>
+                <%= end %>
+                <strong>Full Name</strong><i class="right triangle icon"></i>
+                <%= if is_nil(@user.name) do %>
+                  <i>-</i><br/>
+                <%= else %>
+                  <%= @user.name %><br/>
+                <%= end %>
+
+                <strong>IC</strong><i class="right triangle icon"></i>
+                <%= if is_nil(@user.ic) do %>
+                  <i>-</i><br/>
+                <%= else %>
+                  <%= @user.ic %><br/>
+                <%= end %>
+
+                <strong>Date of Birth</strong><i class="right triangle icon"></i>
+                <%= if is_nil(@user.dob) do %>
+                  <i>-</i><br/>
+                <%= else %>
+                  <%= @user.dob %><br/>
+                <%= end %>
+
+                <strong>Full Name</strong><i class="right triangle icon"></i>
+                <%= if is_nil(@user.name) do %>
+                  <i>-</i><br/>
+                <%= else %>
+                  <%= @user.name %><br/>
+                <%= end %>
+
+                <strong>Race</strong><i class="right triangle icon"></i>
+                <%= if is_nil(@user.race) do %>
+                  <i>-</i><br/>
+                <%= else %>
+                  <%= @user.race %><br/>
+                <%= end %>
+
+                <strong>Gender</strong><i class="right triangle icon"></i>
+                <%= if is_nil(@user.gender) do %>
+                  <i>-</i><br/>
+                <%= else %>
+                  <%= @user.gender %><br/>
+                <%= end %>
+
+                <strong>Nationality</strong><i class="right triangle icon"></i>
+                <%= if is_nil(@user.nationality) do %>
+                  <i>-</i><br/>
+                <%= else %>
+                  <%= @user.nationality %><br/>
+                <%= end %>
+
+                <strong>Mailing Address</strong><i class="right triangle icon"></i>
+                <%= if is_nil(@user.mailing_address) do %>
+                  <i>-</i><br/>
+                <%= else %>
+                  <%= @user.mailing_address %><br/>
+                <%= end %>
+
+                <strong>Professional Designation</strong><i class="right triangle icon"></i>
+                <%= if is_nil(@user.professional_designation) do %>
+                  <i>-</i><br/>
+                <%= else %>
+                  <%= @user.name %><br/>
+                <%= end %>
+
+                <strong>Qualification</strong><i class="right triangle icon"></i>
+                <%= if is_nil(@user.qualification) do %>
+                  <i>-</i><br/>
+                <%= else %>
+                  <%= @user.qualification %><br/>
+                <%= end %>
+
+                <strong>CV</strong><i class="right triangle icon"></i>
+                <%= if is_nil(@cv_path) do %>
+                  <i>-</i><br/>
+                <%= else %>
+                  <%= link html_escape({:safe, "<p class='ui gray label'><i class='ui unhide icon'></i>View</p>"}), to: @cv_path, target: "_blank" %>
+                  <br/>
+                <%= end %>
+
+                <strong>Facility</strong><i class="right triangle icon"></i>
+                <%= if is_nil(@user.facility) do %>
+                  <i>-</i><br/>
+                <%= else %>
+                  <%= @user.facility.facility_name %><br/>
+                <%= end %>
+
+                <strong>Last Updated At</strong><i class="right triangle icon"></i>
+                <%= if is_nil(@user.profile_updated_at) do %>
+                  <i>-</i><br/>
+                <%= else %>
+                  <%= Timex.Timezone.convert(@user.profile_updated_at, "Asia/Kuala_Lumpur") |>
+                  Timex.format!("%a, %b %d, %Y %l:%M%P", :strftime) %><br/>
+                <%= end %>
+
+              </div>
+            </div>
+          </div>
+          <div class="extra content">
+            <%= link html_escape({:safe, "<i class='edit icon'></i>Edit"}), to: admin_path(@conn, :edit, @user), class: "ui right blue floated compact labeled icon button"  %>
+            <%= link html_escape({:safe, "<i class='unlock alternate icon'></i>Change Password"}), to: admin_path(@conn, :change, @user), class: "ui right floated compact labeled icon button"  %>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+  </div>
+
+  <%= unless is_nil(@memberships) do %>
+  <%= unless Enum.count(@memberships) == 0 do %>
+  <div class="sixteen wide column">
+    <h3 class="ui dividing header">
+      <i class="large tags icon"></i>
+      <div class="content">Membership History
+      </div>
+    </h3>
+    <table class="ui celled table">
+      <thead>
+        <tr>
+          <th>Facility</th>
+          <th>Membership Category</th>
+          <th>Membership Type</th>
+          <th>Price</th>
+          <th>Discount</th>
+          <th>Active From</th>
+          <th>Active To</th>
+          <th>Certificate</th>
+        </tr>
+      </thead>
+      <tbody>
+        <%= for membership <- @memberships do %>
+        <tr>
+          <td><%= membership.facility.facility_name %></td>
+          <%= unless is_nil(membership.membership_category) do %>
+            <td><%= membership.membership_category.membership_category_name %></td>
+          <%= else %>
+            <td><i>-</i></td>
+          <%= end %>
+          <%= unless is_nil(membership.membership_type) do %>
+            <td><%= membership.membership_type.membership_type_name %></td>
+          <%= else %>
+            <td><i>-</i></td>
+          <%= end %>
+          <td>
+            <%= unless is_nil(membership.package.life_membership_price) do %>
+              <%= if membership.rate == membership.package.life_membership_price do %>
+                <%= membership.package.life_membership_price %> <strong>(Life)</strong>
+              <%= end %>
+            <%= end %>
+            <%= unless is_nil(membership.package.new_member_annual_price) do %>
+              <%= if membership.rate == membership.package.new_member_annual_price do %>
+                <%= membership.package.new_member_annual_price %> <strong>(New)</strong>
+              <%= end %>
+            <%= end %>
+            <%= unless is_nil(membership.package.renewal_existing_member_annual_price) do %>
+              <%= if membership.rate == membership.package.renewal_existing_member_annual_price do %>
+                <%= membership.package.renewal_existing_member_annual_price %> <strong>(Renewal)</strong>
+              <%= end %>
+            <%= end %>
+          </td>
+          <td>
+            <%= unless is_nil(membership.package_discount) do %>
+              <%= membership.package_discount.discount_percent %>
+            <%= else %>
+              <i>-</i>
+            <%= end %>
+
+          </td>
+          <td>
+            <%= unless is_nil(membership.active_from) do %>
+              <%= Timex.format!(membership.active_from, "%b %d, %Y", :strftime) %>
+            <%= else %>
+              <i>-</i>
+            <%= end %>
+          </td>
+          <td>
+            <%= unless is_nil(membership.active_to) do %>
+              <%= Timex.format!(membership.active_to, "%b %d, %Y", :strftime) %>
+            <%= else %>
+              <i>-</i>
+            <%= end %>
+          </td>
+          <td>
+            <%= unless is_nil(membership.certificate_path) do %>
+            <%= link html_escape({:safe, "View"}), to: MsqhPortal.MemberCert.url({membership.certificate_path, membership}, :original)
+            |> String.split_at(12)
+            |> Tuple.delete_at(0)
+            |> Tuple.to_list
+            |> Enum.join, target: "_blank"  %>
+            <%= else %>
+              <i>-</i>
+            <%= end %>
+          </td>
+        </tr>
+      </tbody>
+      <%= end %>
+    </table>
+  </div>
+  <%= end %>
+  <%= end %>
+  <%= unless is_nil(@payment_logs) do %>
+  <%= unless Enum.count(@payment_logs) == 0 do %>
+  <div class="sixteen wide column">
+      <h3 class="ui dividing header">
+        <i class="large calculator icon"></i>
+        <div class="content">Payment History
+        </div>
+      </h3>
+      <table class="ui celled table">
+        <thead>
+          <tr>
+            <th class="two wide">Logged At</th>
+            <th class="one wide">Member</th>
+            <th class="one wide">Member State</th>
+            <th class="one wide">Verified by Admin</th>
+            <th class="two wide">Membership Expiration</th>
+            <th class="two wide">Payment Method</th>
+            <th class="one wide">Facility</th>
+            <th class="two wide">Membership Category</th>
+            <th class="one wide">Membership Type</th>
+            <th class="one wide">Annual Price</th>
+            <th class="one wide">Verified</th>
+          </tr>
+        </thead>
+        <tbody>
+      <%= for payment_log <- @payment_logs do %>
+        <%= if payment_log.payment_verified do %>
+          <tr>
+        <%= else %>
+          <tr class="warning">
+        <%= end %>
+            <td><%= unless is_nil(payment_log.updated_at) do %>
+              <%= Timex.Timezone.convert(payment_log.updated_at, "Asia/Kuala_Lumpur") |>
+              Timex.format!("%A, %b %d, %Y %l:%M%P", :strftime) %>
+              <%= else %>
+                -
+              <%= end %>
+            </td>
+            <td>
+            <%= unless is_nil(payment_log.member) do %>
+              <%= link payment_log.member.username, to: admin_path(@conn, :show, payment_log.member), target: "_blank"  %>
+            <%= else %>
+              -
+            <%= end %>
+
+            </td>
+            <td><%= unless is_nil(payment_log.receipt_path) do %>
+            <%= link html_escape({:safe, "RECEIPT"}), to: MsqhPortal.Receipt.url({payment_log.receipt_path, payment_log.membership}, :original)
+            |> String.split_at(12)
+            |> Tuple.delete_at(0)
+            |> Tuple.to_list
+            |> Enum.join, target: "_blank"  %>
+              <%= else %>
+              <%= payment_log.state %>
+            <%= end %>
+            </td>
+            <td>
+            <%= unless is_nil(payment_log.admin) do %>
+              <%= payment_log.admin.username %>
+            <%= else %>
+              -
+            <%= end %>
+
+            </td>
+            <td><%= unless is_nil(payment_log.active_to) do %>
+              <%= Timex.Timezone.convert(payment_log.active_to, "Asia/Kuala_Lumpur") |>
+              Timex.format!("%b %d, %Y", :strftime) %>
+              <%= else %>
+                -
+              <%= end %>
+            </td>
+            <td><%= unless is_nil(payment_log.membership.proof_payment_path) do %>
+            <%= link payment_log.payment_type.name, to: MsqhPortal.ProofPayment.url({payment_log.membership.proof_payment_path, payment_log.membership}, :original)
+            |> String.split_at(12)
+            |> Tuple.delete_at(0)
+            |> Tuple.to_list
+            |> Enum.join, target: "_blank"  %>
+              <%= else %>
+              <%= payment_log.payment_type.name %>
+              <%= end %>
+            </td>
+            <td><%= payment_log.facility.facility_name %></td>
+            <td><%= payment_log.membership_category.membership_category_name %></td>
+            <td>
+              <%= unless is_nil(payment_log.membership_type) do %>
+                <%= payment_log.membership_type.membership_type_name %>
+                <%= else %>
+                -
+              <%= end %>
+            </td>
+            <td>
+              <%= unless is_nil(payment_log.package.life_membership_price) do %>
+                <%= payment_log.package.life_membership_price %>
+              <%= end %>
+              <%= unless is_nil(payment_log.package.new_member_annual_price) do %>
+                <%= payment_log.package.new_member_annual_price %>
+              <%= end %>
+              <%= unless is_nil(payment_log.package.renewal_existing_member_annual_price) do %>
+                <%= payment_log.package.renewal_existing_member_annual_price %>
+              <%= end %>
+            </td>
+            <td class="ui center aligned header">
+              <%= if payment_log.payment_verified do %>
+                <i class='green checkmark icon'></i>
+                <%= else %>
+                <i class='red remove icon'></i>
+              <%= end %>
+            </td>
+          </tr>
+      <% end %>
+        </tbody>
+      </table>
+      <%= pagination_links @payment_logs, view_style: :semantic%>
+    </div>
+    <%= end %>
+    <%= end %>
+</div>
